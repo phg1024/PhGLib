@@ -20,6 +20,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\include\Geometry\matrix.hpp" />
+    <ClInclude Include="..\include\Geometry\Mesh.h" />
+    <ClInclude Include="..\include\Geometry\MeshBase.hpp" />
     <ClInclude Include="..\include\Geometry\MeshLoader.h" />
     <ClInclude Include="..\include\Geometry\point.hpp" />
     <ClInclude Include="..\include\Geometry\shape.h" />
@@ -35,9 +37,11 @@
     <ClInclude Include="..\include\Utils\fileutils.h" />
     <ClInclude Include="..\include\Utils\singleton.hpp" />
     <ClInclude Include="..\include\Utils\stringutils.h" />
+    <ClInclude Include="..\include\Utils\Timer.h" />
     <ClInclude Include="..\include\Utils\utility.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\include\Geometry\Mesh.cpp" />
     <ClCompile Include="..\include\Geometry\MeshLoader.cpp" />
     <ClCompile Include="..\include\IO\FileMapper.cpp" />
     <ClCompile Include="..\include\OpenGL\gl2dcanvas.cpp" />
@@ -47,6 +51,7 @@
     <ClCompile Include="..\include\OpenGL\glTrackball.cpp" />
     <ClCompile Include="..\include\Utils\fileutils.cpp" />
     <ClCompile Include="..\include\Utils\stringutils.cpp" />
+    <ClCompile Include="..\include\Utils\Timer.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B12702AD-ABFB-343A-A199-8E24837244A3}</ProjectGuid>
@@ -63,11 +68,11 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120_CTP_Nov2012</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -92,15 +97,16 @@
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>..\lib</OutDir>
     <IncludePath>C:\Users\PhG\Desktop\Code\Libraries\freeglut-2.8.1\include;C:\Users\PhG\Desktop\Code\Libraries\glew-1.10.0\include;C:\Users\PhG\Desktop\Code\Libraries\PhGUtils\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\PhG\Desktop\Code\Libraries\glew-1.10.0\lib\Release\x64;C:\Users\PhG\Desktop\Code\Libraries\freeglut-2.8.1\lib\x64\Debug;$(LibraryPath)</LibraryPath>
+    <TargetName>$(ProjectName)d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>..\lib</OutDir>
     <IncludePath>C:\Users\PhG\Desktop\Code\Libraries\glew-1.10.0\include;C:\Users\PhG\Desktop\Code\Libraries\freeglut-2.8.1\include;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\PhG\Desktop\Code\Libraries\glew-1.10.0\lib\Release\x64;C:\Users\PhG\Desktop\Code\Libraries\freeglut-2.8.1\lib\x64\Debug;$(LibraryPath)</LibraryPath>
   </PropertyGroup>

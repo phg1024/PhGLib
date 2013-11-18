@@ -4,12 +4,10 @@
 #include "point.hpp"
 #include "vector.hpp"
 
+class Mesh;
 class MeshLoader
 {
 public:
-	virtual bool load(const string& filename) = 0;
-
-protected:
 	typedef Point3f vert_t;
 	struct face_t {
 		face_t() {
@@ -23,6 +21,15 @@ protected:
 	};
 	typedef Point2f texcoord_t;
 	typedef Vector3f norm_t;
+
+	virtual bool load(const string& filename) = 0;
+
+	const vector<vert_t>& getVerts() const { return verts; }
+	const vector<face_t>& getFaces() const { return faces; }
+	const vector<norm_t>& getNormals() const { return normals; }
+	const vector<texcoord_t>& getTexcoords() const { return texcoords; }
+
+protected:
 
 	bool triangulated;
 	bool hasVertexTexCoord;

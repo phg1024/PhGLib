@@ -1,4 +1,5 @@
 #include "MeshLoader.h"
+#include "utility.hpp"
 #include "stringutils.h"
 #include "fileutils.h"
 #include "../IO/FileMapper.h"
@@ -235,10 +236,6 @@ bool OBJLoader::load(const string& filename) {
 
 			if( fin.eof() )
 				break;
-		}
-
-		if( !triangulated ) {
-			triangulate();
 		}
 
 		fm.unmap();
