@@ -57,6 +57,18 @@ public:
 	template <typename PT>
 	friend Point2<PT> operator*(PT factor, const Point2<PT>& p);
 
+	T squaredDistanceTo(const Point2<T>& p) {
+		T dx = p.x - x;
+		T dy = p.y - y;
+		return dx * dx + dy * dy;
+	}
+
+	T distanceTo(const Point2<T>& p) {
+		T dx = p.x - x;
+		T dy = p.y - y;
+		return sqrt(dx * dx + dy * dy);
+	}
+
 	// stream operators
 	template <typename PT>
 	friend ostream& operator<<(ostream& os, const Point2<PT>& p);
@@ -147,6 +159,20 @@ public:
 
 	template <typename FT, typename PT>
 	friend Point3<PT> operator*(FT factor, const Point3<PT>& p);
+
+	T squaredDistanceTo(const Point3<T>& p) {
+		T dx = p.x - x;
+		T dy = p.y - y;
+		T dz = p.z - z;
+		return dx * dx + dy * dy + dz * dz;
+	}
+
+	T distanceTo(const Point3<T>& p) {
+		T dx = p.x - x;
+		T dy = p.y - y;
+		T dz = p.z - z;
+		return sqrt(dx * dx + dy * dy + dz * dz);
+	}
 
 	// stream operators
 	template <typename PT>
