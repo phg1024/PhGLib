@@ -35,7 +35,7 @@ template <> lapack_int xgels<double>(int order, lapack_int m, lapack_int n, lapa
 							  double* b, lapack_int ldb, 
 							  double* s, double rcond, lapack_int* rank) 
 {
-	return LAPACKE_sgelsd(order, m, n, nrhs, a, lda, b, ldb, s, rcond, rank);
+	return LAPACKE_dgelsd(order, m, n, nrhs, a, lda, b, ldb, s, rcond, rank);
 }
 
 template <typename T>
@@ -49,10 +49,13 @@ arma::vec toVec(const DenseVector<T>& b) {
 
 // least square solver
 template <typename T>
-DenseVector<T> leastsqaure(const DenseMatrix<T>& A, const DenseVector<T>& b) {
+lapack_int leastsquare(DenseMatrix<T>& A, DenseVector<T>& b) {
+	MKL_INT rank;
+	lapack_int m = A.rows(), n = A.cols();
+	DenseVector<T> s(m);
 	// call the wrapper
-	xgels<T>();
-
+	return xgels<T>(LAPACK_COL_MAJOR, m, n, 1, A.ptr(), A.rows(), b.ptr(), b.length(), 
+		s.ptr(), -1.0, &rank);
 }
 
 template <typename T>

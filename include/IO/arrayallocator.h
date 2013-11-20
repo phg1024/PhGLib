@@ -1,5 +1,5 @@
-#include "common.h"
-#include "singleton.hpp"
+#include "../phgutils.h"
+#include "../Utils/singleton.hpp"
 
 class MemoryCounter;
 

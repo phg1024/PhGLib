@@ -1,6 +1,6 @@
 #pragma once
 
-#include "common.h"
+#include "../phgutils.h"
 
 template <typename T>
 class VectorBase {

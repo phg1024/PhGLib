@@ -1,7 +1,7 @@
 #pragma once
 
-#include "common.h"
-#include "arrayallocator.h"
+#include "../phgutils.h"
+#include "../IO/arrayallocator.h"
 
 template <typename T=double>
 class MatrixBase {
