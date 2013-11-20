@@ -231,10 +231,12 @@ DenseMatrix<T> DenseMatrix<T>::operator +(const DenseMatrix<T> &rhs)
 	{
 		DenseMatrix<T> result(mRows, rhs.cols());
 
-		LS_BLAS::dgeadd(mRows, mCols,
-			1.0,
-			mElems, rhs.ptr(),
-			result.ptr());
+		idx_t count = mRows * mCols;
+		T* resptr = result.ptr();
+		const T* rhsptr = rhs.ptr();
+		for(idx_t i=0;i<count;i++) {
+			resptr[i] = mElems[i] + rhsptr[i];
+		}
 
 		return result;
 	}
@@ -258,10 +260,12 @@ DenseMatrix<T> DenseMatrix<T>::operator -(const DenseMatrix<T> &rhs)
 	{
 		DenseMatrix<T> result(mRows, rhs.cols());
 
-		LS_BLAS::dgeadd(mRows, mCols,
-			-1.0,
-			mElems, rhs.ptr(),
-			result.ptr());
+		idx_t count = mRows * mCols;
+		T* resptr = result.ptr();
+		const T* rhsptr = rhs.ptr();
+		for(idx_t i=0;i<count;i++) {
+			resptr[i] = mElems[i] - rhsptr[i];
+		}
 
 		return result;
 	}
@@ -285,10 +289,15 @@ DenseMatrix<T> DenseMatrix<T>::operator *(const DenseMatrix<T> &rhs)
 	{
 		DenseMatrix<T> result(mRows, rhs.cols());
 
-		LS_BLAS::dgemm(mRows, rhs.cols(), mCols,
-			1.0, 0,
-			mElems, rhs.ptr(),
-			result.ptr());
+		for(idx_t c=0;c<rhs.cols();c++) {
+			for(idx_t r=0;r<mRows;r++) {
+				T val = 0;
+				for(idx_t k=0;k<mCols;k++) {
+					val += (*this)(r, k) * rhs(k, c);
+				}
+				result(r, c) = val;
+			}
+		}
 
 		return result;
 	}
