@@ -238,6 +238,7 @@ public:
 	}
 
 	void resize(int l, int m, int n) {
+		d[0] = l; d[1] = m; d[2] = n;
 		data.resize(l);
 		for_each(data.begin(), data.end(), [=](Tensor2<T>& t){
 			t.resize(m, n);
