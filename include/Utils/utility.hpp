@@ -38,7 +38,7 @@ void debug(const string& name, T value)
 template <typename T, typename ...Args>
 void debug(const string& name, T value, Args ...args)
 {
-	cout << name << " = " << value << endl;
+	cout << name << " = " << value << "\t";
 	debug(args...);
 }
 

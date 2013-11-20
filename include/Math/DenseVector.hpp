@@ -27,7 +27,9 @@ public:
     DenseVector operator*=(double);
     DenseVector operator/(double);
 
-	elem_t dot(const DenseVector& v) const;
+	void resize(size_t s);
+
+	elem_t dot(const DenseVector& rhs) const;
 	elem_t sum() const;
 
     elem_t* ptr() { return mElems; }
@@ -147,6 +149,15 @@ DenseVector<T>::~DenseVector()
 
 
 template <typename T>
+void DenseVector<T>::resize( size_t length )
+{
+	ArrayAllocator<elem_t>::instance().release(mElems, mLength);
+	mLength = length;
+	mElems = ArrayAllocator<elem_t>::instance().allocate(length);
+	memset(mElems, 0, sizeof(elem_t) * length);
+}
+
+template <typename T>
 DenseVector<T> DenseVector<T>::operator-(const DenseVector &rhs)
 {
     if( rhs.length() != mLength )
@@ -168,7 +179,7 @@ DenseVector<T> DenseVector<T>::operator-(const DenseVector &rhs)
 }
 
 template <typename T>
-T DenseVector<T>::dot(const DenseVector &rhs) const
+typename DenseVector<T>::elem_t DenseVector<T>::dot(const DenseVector &rhs) const
 {
     if( rhs.length() != mLength )
     {
@@ -189,7 +200,7 @@ T DenseVector<T>::dot(const DenseVector &rhs) const
 }
 
 template <typename T>
-T DenseVector<T>::sum() const
+typename DenseVector<T>::elem_t DenseVector<T>::sum() const
 {
 	T res = 0;
 
