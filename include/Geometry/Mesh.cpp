@@ -1,6 +1,8 @@
 #include "Mesh.h"
 #include "GL/glut.h"
 #include "MeshLoader.h"
+
+namespace PhGUtils {
 // ----------------------------------------------------------------------------
 // Triangle mesh
 // ----------------------------------------------------------------------------
@@ -68,5 +70,7 @@ void QuadMesh::initWithLoader( const MeshLoader& loader )
 // ----------------------------------------------------------------------------
 void PolygonMesh::draw()
 {
+
+}
 
 }

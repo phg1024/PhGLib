@@ -3,6 +3,7 @@
 #include "VectorBase.hpp"
 #include <fstream>
 
+namespace PhGUtils {
 template <typename T>
 class DenseVector : public VectorBase<T>
 {
@@ -263,4 +264,6 @@ void DenseVector<T>::save(const string& filename, size_t lineSize) const
     file << endl;
 
     file.close();
+}
+
 }

@@ -7,6 +7,7 @@
 
 #include "../phgutils.h"
 
+namespace PhGUtils {
 template <typename T>
 class Vector3;
 
@@ -298,3 +299,5 @@ typedef Point3<double> Point3d;
 typedef Point4<int> Point4i;
 typedef Point4<float> Point4f;
 typedef Point4<double> Point4d;
+
+}

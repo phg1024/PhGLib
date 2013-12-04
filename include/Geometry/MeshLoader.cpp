@@ -5,6 +5,7 @@
 #include "../IO/FileMapper.h"
 #include "../Utils/Timer.h"
 
+namespace PhGUtils {
 void MeshLoader::clear() {
 	verts.clear();
 	faces.clear();
@@ -262,4 +263,6 @@ bool PLYLoader::load(const string& filename) {
 		cerr << e.what() << endl;
 		return false;
 	}
+}
+
 }

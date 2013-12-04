@@ -1,5 +1,6 @@
 #pragma once
 
+namespace PhGUtils {
 /* value of Pi */
 static const double PI = 3.14159265;
 
@@ -17,4 +18,6 @@ T clamp(T val, T lower, T upper) {
 	if( val < lower ) return lower;
 	if( val > upper ) return upper;
 	return val;
+}
+
 }

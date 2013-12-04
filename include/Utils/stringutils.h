@@ -2,6 +2,7 @@
 
 #include "../phgutils.h"
 
+namespace PhGUtils {
 enum CaseSensitivity{
 	CaseSensitive,
 	CaseInsensitive
@@ -27,3 +28,4 @@ string toString(const T& t) {
 }
 
 string padWith(const string& str, char c, int L);
+}

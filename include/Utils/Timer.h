@@ -2,6 +2,8 @@
 
 #include <Windows.h>
 
+namespace PhGUtils {
+
 class Timer
 {
 public:
@@ -23,3 +25,4 @@ private:
 	__int64 start, end;
 };
 
+}

@@ -1,6 +1,6 @@
 #include "FileMapper.h"
 
-
+namespace PhGUtils {
 FileMapper::FileMapper(const string& filename):
 	filename(filename)
 {}
@@ -95,4 +95,6 @@ bool FileMapper::map()
 	pData = (char*)lpMapAddress;
 
 	return true;
+}
+
 }

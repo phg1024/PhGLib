@@ -3,6 +3,7 @@
 #include "MatrixBase.hpp"
 #include "DenseVector.hpp"
 
+namespace PhGUtils {
 template <typename T>
 class DenseMatrix : public MatrixBase<T>
 {
@@ -402,3 +403,5 @@ void DenseMatrix<T>::print(const string& title, bool trans) const
 
 typedef DenseMatrix<float> DenseMatrixf;
 typedef DenseMatrix<double> DenseMatrixd;
+
+}

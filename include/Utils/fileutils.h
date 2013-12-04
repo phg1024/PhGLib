@@ -2,6 +2,7 @@
 
 #include "../phgutils.h"
 
+namespace PhGUtils {
 /* get the file extension */
 string getFileExtension(const string& filename);
 
@@ -27,4 +28,5 @@ bool write2file(const T& v, const string& filename)
 		cerr << "Failed to write to file " << filename << endl;
 		return false;
 	}
+}
 }

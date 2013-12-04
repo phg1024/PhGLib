@@ -4,6 +4,7 @@
 #include "point.hpp"
 #include "matrix.hpp"
 
+namespace PhGUtils {
 struct RigidTransformation;
 
 template <typename T>
@@ -177,4 +178,6 @@ float lineToPointDistance(const Point3<T>& lp1, const Point3<T>& lp2,
 
 	// @attention	return the squared distance
 	return k.normSquared() / dir.normSquared();
+}
+
 }

@@ -1,5 +1,6 @@
 #include "stringutils.h"
 
+namespace PhGUtils {
 // string related
 string toLower( const string& s )
 {
@@ -76,4 +77,6 @@ string padWith(const string& str, char c, int L) {
 		res = c + res;
 	}
 	return res;
+}
+
 }

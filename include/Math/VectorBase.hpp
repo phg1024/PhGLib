@@ -2,6 +2,7 @@
 
 #include "../phgutils.h"
 
+namespace PhGUtils {
 template <typename T>
 class VectorBase {
 public:
@@ -42,3 +43,5 @@ protected:
     VectorType mType;
     int mElemSize;
 };
+
+}

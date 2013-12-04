@@ -1,6 +1,6 @@
 #include "Timer.h"
 
-
+namespace PhGUtils {
 Timer::Timer(void)
 {
 }
@@ -16,4 +16,6 @@ void Timer::tic() {
 
 void Timer::toc() {
 	QueryPerformanceCounter((LARGE_INTEGER *) &end);
+}
+
 }

@@ -4,6 +4,7 @@
 #include "point.hpp"
 #include "vector.hpp"
 
+namespace PhGUtils {
 class MeshLoader;
 
 template <typename VT, typename FT>
@@ -55,3 +56,5 @@ protected:
 	vector<norm_t> n;
 	vector<texcoord_t> t;
 };
+
+}

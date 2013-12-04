@@ -2,6 +2,7 @@
 
 #include "MeshBase.hpp"
 
+namespace PhGUtils {
 class MeshLoader;
 
 class TriMesh : MeshBase<Point3f, Point3i>
@@ -71,3 +72,5 @@ public:
 
 private:
 };
+
+}

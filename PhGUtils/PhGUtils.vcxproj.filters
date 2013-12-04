@@ -109,6 +109,9 @@
     <ClInclude Include="..\include\Math\VectorBase.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Kinect\KinectManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\include\OpenGL\gl2dcanvas.cpp">
@@ -142,6 +145,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\include\Utils\Timer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\include\Kinect\KinectManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

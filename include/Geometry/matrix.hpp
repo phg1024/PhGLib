@@ -4,6 +4,7 @@
 #include "vector.hpp"
 #include "point.hpp"
 
+namespace PhGUtils {
 template <typename T>
 class Matrix3x3
 {
@@ -576,3 +577,5 @@ typedef Matrix3x3<double> Matrix3x3d;
 
 typedef Matrix4x4<float> Matrix4x4f;
 typedef Matrix4x4<double> Matrix4x4d;
+
+}

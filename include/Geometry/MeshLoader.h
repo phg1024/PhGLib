@@ -4,6 +4,8 @@
 #include "point.hpp"
 #include "vector.hpp"
 
+namespace PhGUtils {
+
 class Mesh;
 class MeshLoader
 {
@@ -67,3 +69,5 @@ class OBJLoader : public MeshLoader
 public:
 	virtual bool load(const string& filename);
 };
+
+}

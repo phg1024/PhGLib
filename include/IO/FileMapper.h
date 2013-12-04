@@ -11,6 +11,7 @@ using std::cout;
 using std::cerr;
 using std::endl;
 
+namespace PhGUtils {
 class FileMapper
 {
 public:
@@ -47,3 +48,4 @@ private:
 	int iViewDelta;
 };
 
+}
