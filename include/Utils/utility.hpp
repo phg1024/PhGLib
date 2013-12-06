@@ -3,6 +3,7 @@
 #include "../phgutils.h"
 #include <typeinfo>
 
+namespace PhGUtils {
 // misc
 template <typename T>
 ostream& printArray(T* A, int N, ostream& os = cout)
@@ -79,3 +80,5 @@ private:
 
 struct LazyProgrammerException{};
 typedef ExceptionBase<LazyProgrammerException> lazy_exception;
+
+}

@@ -12,7 +12,14 @@ namespace PhGUtils {
 
 class KinectManager {
 public:
-	KinectManager();
+	enum Mode{
+		Separate = 0,	// separate color and depth images
+		WarpDepth,		// warp depth to match color
+		WarpColor,		// warp color to match depth
+		ModeCount
+	};
+
+	KinectManager(KinectManager::Mode m = Separate);
 	~KinectManager();
 
 	bool initKinect();
@@ -25,15 +32,20 @@ public:
 	const vector<unsigned char>& getRGBData() const{ return rgbdata; }
 	const vector<unsigned char>& getDepthData() const{ return depthdata; }
 
+	KinectManager::Mode getMode() const { return m; }
+	void setMode(KinectManager::Mode val) { m = val; }
+
 protected:
-	bool updateRGBData();
-	bool updateDepthData();
+	bool retrieveRGBData();
+	bool retrieveDepthData();
+
+	void directMapColor();
+	void directMapDepth();
+	void warpDepthToColor();
+	void warpColorToDepth();
 
 private:
-	enum Mode{
-		Separate = 0,
-		ColorOver
-	} m;
+	Mode m;
 
 	// Kinect variables
 	HANDLE rgbStream;              // The identifier of the Kinect's RGB Camera
@@ -43,6 +55,9 @@ private:
 	static const int width = 640;
 	static const int height = 480;
 
+	vector<long> colorCoordinates;	// the color coordinates for each depth pixel
+	vector<USHORT> depthValues;
+	vector<unsigned char> colorValues;
 	vector<unsigned char> rgbdata;
 	vector<unsigned char> depthdata;
 };
