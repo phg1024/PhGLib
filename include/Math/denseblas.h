@@ -6,7 +6,7 @@
 #include "mkl.h"
 
 template <typename T, typename MT>
-MT toMat(const DenseMatrix<T>& A) {
+MT toMat(const PhGUtils::DenseMatrix<T>& A) {
 	MT Amat(A.rows(), A.cols());
 
 	for(int i=0;i<A.cols();i++) {
@@ -39,7 +39,7 @@ template <> lapack_int xgels<double>(int order, lapack_int m, lapack_int n, lapa
 }
 
 template <typename T>
-arma::vec toVec(const DenseVector<T>& b) {
+arma::vec toVec(const PhGUtils::DenseVector<T>& b) {
 	arma::vec bvec(b.length());
 	for(int i=0;i<b.length();i++) {
 		bvec(i) = b(i);
@@ -49,23 +49,23 @@ arma::vec toVec(const DenseVector<T>& b) {
 
 // least square solver
 template <typename T>
-lapack_int leastsquare(DenseMatrix<T>& A, DenseVector<T>& b) {
+lapack_int leastsquare(PhGUtils::DenseMatrix<T>& A, PhGUtils::DenseVector<T>& b) {
 	MKL_INT rank;
 	lapack_int m = A.rows(), n = A.cols();
-	DenseVector<T> s(m);
+	PhGUtils::DenseVector<T> s(m);
 	// call the wrapper
 	return xgels<T>(LAPACK_COL_MAJOR, m, n, 1, A.ptr(), m, b.ptr(), m, 
 		s.ptr(), -1.0, &rank);
 }
 
 template <typename T>
-DenseVector<T> solve(const DenseMatrix<T>& A, const DenseVector<T>& b) {
+PhGUtils::DenseVector<T> solve(const PhGUtils::DenseMatrix<T>& A, const PhGUtils::DenseVector<T>& b) {
 	arma::mat Amat = toMat(A);
 	arma::vec bvec = toVec(b);
 	
 	arma::vec x = arma::solve(Amat, bvec);
 
-	DenseVector<T> res(x.size());
+	PhGUtils::DenseVector<T> res(x.size());
 	for(int i=0;i<x.size();i++) {
 		res(i) = x(i);
 	}

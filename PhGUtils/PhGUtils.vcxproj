@@ -23,6 +23,7 @@
     <ClInclude Include="..\include\IO\arrayallocator.h" />
     <ClInclude Include="..\include\IO\FileMapper.h" />
     <ClInclude Include="..\include\Kinect\KinectManager.h" />
+    <ClInclude Include="..\include\Kinect\StreamViewer.h" />
     <ClInclude Include="..\include\Math\denseblas.h" />
     <ClInclude Include="..\include\Math\DenseMatrix.hpp" />
     <ClInclude Include="..\include\Math\DenseVector.hpp" />
@@ -46,6 +47,7 @@
     <ClCompile Include="..\include\Geometry\MeshLoader.cpp" />
     <ClCompile Include="..\include\IO\FileMapper.cpp" />
     <ClCompile Include="..\include\Kinect\KinectManager.cpp" />
+    <ClCompile Include="..\include\Kinect\StreamViewer.cpp" />
     <ClCompile Include="..\include\OpenGL\gl2dcanvas.cpp" />
     <ClCompile Include="..\include\OpenGL\gl3dcanvas.cpp" />
     <ClCompile Include="..\include\OpenGL\glcanvaswindow.cpp" />
