@@ -31,6 +31,7 @@ public:
 	void updateStream();
 	const vector<unsigned char>& getRGBData() const{ return rgbdata; }
 	const vector<unsigned char>& getDepthData() const{ return depthdata; }
+	const vector<USHORT>& getDepthValues() const { return depthValues; }
 
 	KinectManager::Mode getMode() const { return m; }
 	void setMode(KinectManager::Mode val) { m = val; }

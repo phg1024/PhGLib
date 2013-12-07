@@ -10,6 +10,11 @@ public:
 
 	void bindStreamData(const unsigned char* data, int, int);
 	void bindLandmarks(const vector<float>& f) {
+		if( f.empty() ) {
+			// don't update if it is empty
+			return;
+		}
+
 		landmarks = f;
 		update();
 	}

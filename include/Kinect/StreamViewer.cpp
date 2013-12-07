@@ -4,7 +4,7 @@
 StreamViewer::StreamViewer(QWidget* parent):
 	GL2DCanvas(parent)
 {
-	this->resize(320, 240);
+	this->resize(640, 480);
 }
 
 
@@ -42,24 +42,25 @@ void StreamViewer::paintGL() {
 
 	glBindTexture(GL_TEXTURE_2D, textureId);
 
+	glColor4f(1, 1, 1, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(0, 0, 0);
+	glVertex3f(0, 0, 1);
 	glTexCoord2f(1.0f, 0.0f);
-	glVertex3f(width(), 0, 0);
+	glVertex3f(width(), 0, 1);
 	glTexCoord2f(1.0f, 1.0f);
-	glVertex3f(width(), height(), 0.0f);
+	glVertex3f(width(), height(), 1);
 	glTexCoord2f(0.0f, 1.0f);
-	glVertex3f(0, height(), 0.0f);
+	glVertex3f(0, height(), 1);
 	glEnd();
 
 	int npts = landmarks.size()/2;
-	glColor4f(1, 0, 0, 1);
+	glColor4f(0, 1, 0, 1);
 	glPointSize(3.0);
 	glBegin(GL_POINTS);
 	for(int i=0;i<npts;i++) {
-		glVertex3f(landmarks[i*2] * width(), landmarks[i*2+1] * height(), 0.0f);
+		glVertex3f(landmarks[i], landmarks[i+npts], 0.0f);
 	}
 	glEnd();
 }

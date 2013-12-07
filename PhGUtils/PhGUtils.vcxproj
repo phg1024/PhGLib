@@ -23,6 +23,7 @@
     <ClInclude Include="..\include\IO\arrayallocator.h" />
     <ClInclude Include="..\include\IO\FileMapper.h" />
     <ClInclude Include="..\include\Kinect\KinectManager.h" />
+    <ClInclude Include="..\include\Kinect\KinectUtils.h" />
     <ClInclude Include="..\include\Kinect\StreamViewer.h" />
     <ClInclude Include="..\include\Math\denseblas.h" />
     <ClInclude Include="..\include\Math\DenseMatrix.hpp" />

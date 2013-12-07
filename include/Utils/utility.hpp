@@ -24,8 +24,15 @@ namespace PhGUtils {
 	}
 
 	// misc
+	template <typename T> 
+	void printVector(T A, ostream& os = cout) {
+		for(int i=0;i<A.size();i++)
+			os << A[i] << ' ';
+		os << endl;
+	}
+
 	template <typename T>
-	ostream& printArray(T* A, int N, ostream& os = cout)
+	void printArray(T* A, int N, ostream& os = cout)
 	{
 		for(int i=0;i<N;i++)
 			os << A[i] << ' ';
@@ -33,7 +40,7 @@ namespace PhGUtils {
 	}
 
 	template <typename T>
-	ostream& print2DArray(T** A, int rows, int cols, ostream& os = cout)
+	void print2DArray(T** A, int rows, int cols, ostream& os = cout)
 	{
 		for(int i=0;i<rows;i++)
 		{
