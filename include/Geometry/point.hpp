@@ -175,6 +175,11 @@ public:
 		return sqrt(dx * dx + dy * dy + dz * dz);
 	}
 
+ 	void print(const string& title)
+	{
+		cout << (title.empty()?"":title + " = (") << x << ", " << y << ", " << z << ")" << endl;
+	}
+
 	// stream operators
 	template <typename PT>
 	friend ostream& operator<<(ostream& os, const Point3<PT>& p);

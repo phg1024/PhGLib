@@ -41,6 +41,7 @@ public slots:
     void switchInteractionState();
 
     void setSceneScale(double s);
+	void setCameraPos(float x, float y, float z);
 
 protected:
     virtual void initializeGL();
@@ -51,7 +52,8 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent* e);
     virtual void mousePressEvent(QMouseEvent * e);
     virtual void mouseReleaseEvent(QMouseEvent * e);
-
+	
+	virtual void keyPressEvent(QKeyEvent *e);
 
     QPointF transformMousePositionFromInput(const QPointF&) const;
 protected:

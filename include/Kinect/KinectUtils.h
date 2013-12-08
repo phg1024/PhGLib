@@ -26,6 +26,35 @@ namespace PhGUtils {
 		return (r + ((int)g)<<8 + ((int)b)<<16);
 	}
 
+	inline void colorToWorld(float u, float v, float d, float &X, float &Y, float &Z) {
+		// focal length
+		const double fx_rgb = 5.2921508098293293e+02;
+		const double fy_rgb = 5.2556393630057437e+02;
+
+		// original setting
+		const float cx_rgb = 3.2894272028759258e+02;
+		const float cy_rgb = 2.6748068171871557e+02;
+
+		// for my kinect
+		//const float cx_rgb = 3.2894272028759258e+02;
+		//const float cy_rgb = 2.5848068171871557e+02;
+
+		// for the Yen-Lin's data
+		//const double cx_rgb = 3.3394272028759258e+02;
+		//const double cy_rgb = 2.4048068171871557e+02;
+
+		// projection mapping
+		//u = clamp((int)((x * fx_rgb / z) + cx_rgb), 0, 639);
+		//v = clamp((int)((y * fy_rgb / z) + cy_rgb), 0, 479);
+
+		double depth = rawDepthToMeters(d);
+
+		// inverse mapping of projection
+		X = (u - cx_rgb) * depth / fx_rgb;
+		Y = (v - cy_rgb) * depth / fy_rgb;
+		Z = -depth;
+	}
+
 	inline void worldToColor(float x, float y, float z, int& u, int& v) {
 		const Matrix4x4d rotMat(
 			9.9984628826577793e-01, 1.2635359098409581e-03, -1.7487233004436643e-02, 0,
@@ -51,12 +80,12 @@ namespace PhGUtils {
 		//const float cy_rgb = 2.6748068171871557e+02;
 
 		// for my kinect
-		//const float cx_rgb = 3.2894272028759258e+02;
-		//const float cy_rgb = 2.5848068171871557e+02;
+		const float cx_rgb = 3.2894272028759258e+02;
+		const float cy_rgb = 2.5848068171871557e+02;
 
 		// for the Yen-Lin's data
-		const double cx_rgb = 3.3394272028759258e+02;
-		const double cy_rgb = 2.4048068171871557e+02;
+		//const double cx_rgb = 3.3394272028759258e+02;
+		//const double cy_rgb = 2.4048068171871557e+02;
 
 		Point4d transformedPos = finalMat * Point4d(x, y, z, 1);
 		Point4d pos;
