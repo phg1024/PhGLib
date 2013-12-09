@@ -5,7 +5,30 @@
 #include <QImage>
 
 namespace PhGUtils {
+	static vector<unsigned char> fromQImage(const string& filename) {
+		vector<unsigned char> pixmap;
+		QImage img(filename.c_str());
 
+		int w = img.width(), h = img.height();
+
+		pixmap.resize(w * h * 4);
+
+		for(int i=0, idx=0;i<h;i++) {
+			for(int j=0;j<w;j++,idx+=4)
+			{
+				QRgb pix = img.pixel(j, i);
+				unsigned char r = qRed(pix);
+				unsigned char g = qGreen(pix);
+				unsigned char b = qBlue(pix);
+				unsigned char a = qAlpha(pix);
+				pixmap[idx] = b;
+				pixmap[idx+1] = g;
+				pixmap[idx+2] = r;
+				pixmap[idx+3] = a;
+			}
+		}
+		return pixmap;
+	}
 
 	static QImage toQImage(const unsigned char* data, int w, int h) {
 		QImage qimg(w, h, QImage::Format_ARGB32);

@@ -26,7 +26,15 @@ namespace PhGUtils {
 		return (r + ((int)g)<<8 + ((int)b)<<16);
 	}
 
+	static Matrix4x4f KinectColorProjection(
+		525.0/320.0, 0, 0, 0,
+		0, 525.0/240.0, 0, 0,
+		0, 0, -1.0, 0,
+		0, 0, -1.0, 0
+		);
+
 	inline void colorToWorld(float u, float v, float d, float &X, float &Y, float &Z) {
+		/*
 		// focal length
 		const double fx_rgb = 5.2921508098293293e+02;
 		const double fy_rgb = 5.2556393630057437e+02;
@@ -34,6 +42,10 @@ namespace PhGUtils {
 		// original setting
 		const float cx_rgb = 3.2894272028759258e+02;
 		const float cy_rgb = 2.6748068171871557e+02;
+		*/
+
+		const float fx_rgb = 525.0, fy_rgb = 525.0;
+		const float cx_rgb = 320.0, cy_rgb = 240.0;
 
 		// for my kinect
 		//const float cx_rgb = 3.2894272028759258e+02;
@@ -47,12 +59,19 @@ namespace PhGUtils {
 		//u = clamp((int)((x * fx_rgb / z) + cx_rgb), 0, 639);
 		//v = clamp((int)((y * fy_rgb / z) + cy_rgb), 0, 479);
 
-		double depth = rawDepthToMeters(d);
+		// This part is correct now.
+		// Given a Kinect depth value, its depth in OpenGL coordinates
+		// system must be negative.
+		double depth = -rawDepthToMeters(d);
+		//double depth = d;
 
 		// inverse mapping of projection
-		X = (u - cx_rgb) * depth / fx_rgb;
+		X = -(u - cx_rgb) * depth / fx_rgb;
 		Y = (v - cy_rgb) * depth / fy_rgb;
-		Z = -depth;
+
+		// this creates a mirrored version of the true mesh
+		Z = depth;
+
 	}
 
 	inline void worldToColor(float x, float y, float z, int& u, int& v) {
