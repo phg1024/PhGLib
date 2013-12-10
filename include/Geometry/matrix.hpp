@@ -216,6 +216,14 @@ public:
 		cout << ' ' << m[2][0] << ", " << m[2][1] << ", " << m[2][2] << ']' << endl;
 	}
 
+	T* data() {
+		return &(m[0][0]);
+	}
+
+	const T* data() const {
+		return &(m[0][0]);
+	}
+
 private:
 	T m[3][3];
 };
@@ -529,6 +537,10 @@ public:
 		return &(m[0][0]);
 	}
 
+	const T* data() const {
+		return &(m[0][0]);
+	}
+	
 private:
 	T m[4][4];
 };
