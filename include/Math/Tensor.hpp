@@ -7,16 +7,39 @@ template <typename T>
 class Tensor1
 {
 public:
-	Tensor1(void){}
-	Tensor1(int n):n(n) { data.resize(n); }
+	Tensor1(void):n(0),data(nullptr){}
+	Tensor1(int n):n(n) { 
+		data = new T[n];
+		memset(data, 0, sizeof(T)*n);
+	}
 	Tensor1(const Tensor1& other):
-		n(other.n), data(other.data)
-	{}
-	~Tensor1(){}
+		n(other.n)
+	{
+		data = new T[n];
+		memcpy(data, other.data, sizeof(T)*n);
+	}
+	Tensor1(Tensor1&& other):
+		n(other.n)
+	{
+		data = other.data;
+		other.data = nullptr;
+	}
+	~Tensor1(){
+		if( data != nullptr ) delete[] data;
+	}
 
 	Tensor1<T>& operator=(const Tensor1<T>& other) {
 		n = other.n;
+		data = new T[n];
+		memcpy(data, other.data, sizeof(T)*n);
+		return (*this);
+	}
+
+	Tensor1<T>& operator=(Tensor1<T>&& other) {
+		n = other.n;
+		if( data ) delete[] data;
 		data = other.data;
+		other.data = nullptr;
 		return (*this);
 	}
 
@@ -32,15 +55,19 @@ public:
 	}
 	void resize(int size){
 		n = size;
-		data.resize(n);
+		data = new T[n];
+		memset(data, 0, sizeof(T)*n);
 	}
+
+	T* rawptr() { return data; }
+	const T* rawptr() const { return data; }
 
 	void print() const{
 		cout << (*this);
 	}
 private:
 	int n;
-	vector<T> data;
+	T* data;
 };
 
 template <typename T>
@@ -56,19 +83,28 @@ template <typename T>
 class Tensor2
 {
 public:
-	Tensor2(void){}
+	Tensor2(void):data(nullptr){ d[0] = d[1] = 0; }
 	Tensor2(int m, int n){
 		d[0] = m; d[1] = n;
-		data.resize(m);
-		for_each(data.begin(), data.end(), [=](Tensor1<T>& t){
-			t.resize(n);
-		});
+		data = new T[m * n];
+		memset(data, 0, sizeof(T)*m*n);
 	}
 	Tensor2(const Tensor2& other){
 		d[0] = other.d[0]; d[1] = other.d[1];
-		data = other.data;
+		if( data ) delete[] data;
+		data = new T[d[0] * d[1]];
+		memcpy(data, other.data, sizeof(T) * data[0] * data[1]);
 	}
-	~Tensor2(){}
+	Tensor2(Tensor2&& other){
+		d[0] = other.d[0]; d[1] = other.d[1];
+		data = other.data;
+		other.data = nullptr;
+	}
+	~Tensor2(){
+		if( data ) {
+			delete[] data;
+		}
+	}
 
 	Tensor2<T>& operator=(const Tensor2<T>& other){
 		d[0] = other.d[0];
@@ -77,19 +113,27 @@ public:
 		return (*this);
 	}
 
-	const Tensor1<T>& operator()(int i) const {
-		return data[i];
+	Tensor2<T>& operator=(Tensor2<T>&& other) {
+		d[0] = other.d[0];
+		d[1] = other.d[1];
+		data = other.data;
+		other.data = nullptr;
+		return (*this);
 	}
 
-	Tensor1<T>& operator()(int i) {
-		return data[i];
+	const T* operator()(int i) const {
+		return data + i * d[1];
+	}
+
+	T* operator()(int i) {
+		return data + i * d[1];
 	}
 
 	const T& operator()(int i, int j) const {
-		return data[i](j);
+		return data[i * d[1] + j];
 	}
 	T& operator()(int i, int j) {
-		return data[i](j);
+		return data[i * d[1] + j];
 	}
 
 	int dim(int mid) const{
@@ -102,21 +146,21 @@ public:
 	void resize(int r, int c){
 		d[0] = r;
 		d[1] = c;
-		data.resize(r);
-		for_each(data.begin(), data.end(), [=](Tensor1<T>& t){
-			t.resize(c);
-		});
+		if( data ) delete[] data;
+		data = new T[r * c];
 	}
 
 	Tensor1<T> modeProduct(const Tensor1<T>& v, int mid) {
 		switch( mid ) {
 		case 0:
 			{
+				// 
 				assert(v.length() == d[0]);
 				Tensor1<T> t1(d[1]);
-				for(int i=0;i<d[0];i++) {
+				T* t1ptr = t1.rawptr();
+				for(int i=0, idx=0;i<d[0];i++) {
 					for(int j=0;j<d[1];j++) {
-						t1(j) += data[i](j) * v(i);
+						t1ptr[j] += data[idx++] * v(i);
 					}
 				}
 				return t1;
@@ -125,9 +169,9 @@ public:
 			{
 				assert(v.length() == d[1]);
 				Tensor1<T> t1(d[0]);
-				for(int i=0;i<d[0];i++) {
+				for(int i=0, idx=0;i<d[0];i++) {
 					for(int j=0;j<d[1];j++) {
-						t1(i) += data[i](j) * v(j);
+						t1(i) += data[idx++] * v(j);
 					}
 				}
 				return t1;
@@ -143,11 +187,15 @@ public:
 	Tensor1<T> unfold() const{
 		Tensor1<T> t(d[0] * d[1]);
 
+		memcpy(t.rawptr(), data, sizeof(T)*d[0]*d[1]);
+
+		/*
 		for(int i=0, idx=0;i<d[0];i++) {
 			for(int j=0;j<d[1];j++, idx++) {
-				t(idx) = data[i](j);
+				t(idx) = data[idx];
 			}
 		}
+		*/
 
 		return t;
 	}
@@ -156,9 +204,8 @@ public:
 	arma::fmat toMat() const {
 		arma::fmat m(d[0], d[1]);
 		for(int i=0;i<d[0];i++) {
-			const Tensor1<T>& ti = data[i];
 			for(int j=0;j<d[1];j++) {
-				m(i, j) = ti(j);
+				m(i, j) = data(i * d[1] + j);
 			}
 		}
 		return m;
@@ -177,7 +224,10 @@ public:
 	void print(const string& title = "") const{
 		if( !title.empty() ) cout << title << " = " << endl;;
 		for(int i=0;i<d[0];i++) {
-			data[i].print();
+			int offset = i * d[1];
+			for(int j=0;j<d[1];j++) {
+				cout << data[offset + j] << ((j==d[1]-1)?'\n':' ');
+			}
 		}
 	}
 
@@ -186,7 +236,11 @@ public:
 
 private:
 	int d[2];
-	vector<Tensor1<T>> data;
+	
+	// need to change the underlying data structure to a raw data block of type T
+	//vector<Tensor1<T>> data;
+	// row major storage
+	T* data;
 };
 
 template <typename T>
@@ -610,7 +664,7 @@ public:
 			for(int i=0;i<d[0];i++) {
 				Tensor2<T>& ti = data[i];
 				for(int j=0;j<d[1];j++) {
-					fin.read(reinterpret_cast<char*>(&(ti(j)(0))), sizeof(T)*d[2]);
+					fin.read(reinterpret_cast<char*>(ti(j)), sizeof(T)*d[2]);
 				}				
 			}
 
@@ -637,7 +691,7 @@ public:
 			for(int i=0;i<d[0];i++) {
 				const Tensor2<T>& ti = data[i];
 				for(int j=0;j<d[1];j++) {
-					fout.write(reinterpret_cast<const char*>(&(ti(j)(0))), sizeof(T)*d[2]);
+					fout.write(reinterpret_cast<const char*>(ti(j)), sizeof(T)*d[2]);
 				}				
 			}
 

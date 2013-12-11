@@ -118,6 +118,9 @@
     <ClInclude Include="..\include\Kinect\KinectUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\include\Math\Tensor.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\include\OpenGL\gl2dcanvas.cpp">

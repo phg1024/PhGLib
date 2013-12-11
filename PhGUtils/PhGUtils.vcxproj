@@ -29,6 +29,7 @@
     <ClInclude Include="..\include\Math\DenseMatrix.hpp" />
     <ClInclude Include="..\include\Math\DenseVector.hpp" />
     <ClInclude Include="..\include\Math\MatrixBase.hpp" />
+    <ClInclude Include="..\include\Math\Tensor.hpp" />
     <ClInclude Include="..\include\Math\VectorBase.hpp" />
     <ClInclude Include="..\include\OpenGL\gl2dcanvas.h" />
     <ClInclude Include="..\include\OpenGL\gl3dcanvas.h" />
