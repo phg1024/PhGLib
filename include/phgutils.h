@@ -3,7 +3,7 @@
 
 // OpenGL related
 #include "GL/glew.h"
-#include "GL/glut.h"
+#include "GL/freeglut.h"
 
 /// STL related
 #include <algorithm>

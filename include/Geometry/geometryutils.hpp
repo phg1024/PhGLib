@@ -31,6 +31,16 @@ void transformPoint(T& x, T& y, T& z, const Matrix3x3<T>& Rmat, const Point3<T>&
 }
 
 template <typename T>
+void rotatePoint(T& x, T& y, T& z, const Matrix3x3<T>& Rmat ) {
+	T nx, ny, nz;
+	const T* m = Rmat.data();
+	nx = m[0] * x + m[1] * y + m[2] * z;
+	ny = m[3] * x + m[4] * y + m[5] * z;
+	nz = m[6] * x + m[7] * y + m[8] * z;
+	x = nx, y = ny, z = nz;
+}
+
+template <typename T>
 /*
  Construct 3x3 rotation matrix with respect to X axis
  */
@@ -149,13 +159,13 @@ void jacobian_rotationMatrix(T thetaX, T thetaY, T thetaZ,
 							 Matrix3x3<T>& JRotY,
 							 Matrix3x3<T>& JRotZ)
 {
-	Matrix3x3<T> rotX = xRotationMatrix(thetaX);
-	Matrix3x3<T> rotY = yRotationMatrix(thetaY);
-	Matrix3x3<T> rotZ = zRotationMatrix(thetaZ);
+	Matrix3x3<T> rotX = xRotationMatrix<T>(thetaX);
+	Matrix3x3<T> rotY = yRotationMatrix<T>(thetaY);
+	Matrix3x3<T> rotZ = zRotationMatrix<T>(thetaZ);
 
-	JRotX = rotZ * rotY * dxRotationMatrix(thetaX);
-	JRotY = rotZ * dyRotationMatrix(thetaY) * rotX;
-	JRotZ = dzRotationMatrix(thetaZ) * rotY * rotX;
+	JRotX = rotZ * rotY * dxRotationMatrix<T>(thetaX);
+	JRotY = rotZ * dyRotationMatrix<T>(thetaY) * rotX;
+	JRotZ = dzRotationMatrix<T>(thetaZ) * rotY * rotX;
 }
 
 template <typename MT, typename PT>
