@@ -2,6 +2,7 @@
 
 #include "../phgutils.h"
 #include <armadillo>
+#include <mkl.h>
 
 template <typename T>
 class Tensor1
@@ -154,26 +155,44 @@ public:
 		switch( mid ) {
 		case 0:
 			{
-				// 
+				// should use mkl
 				assert(v.length() == d[0]);
 				Tensor1<T> t1(d[1]);
+
+				/*
 				T* t1ptr = t1.rawptr();
 				for(int i=0, idx=0;i<d[0];i++) {
 					for(int j=0;j<d[1];j++) {
 						t1ptr[j] += data[idx++] * v(i);
 					}
 				}
+				*/
+				
+				// view the tensor as a matrix stored in column major order
+				cblas_sgemv(CblasColMajor, CblasNoTrans, d[1], d[0], 1.0,
+					data, d[1], v.rawptr(), 1, 0.0, t1.rawptr(), 1); 
+					
+
 				return t1;
 			}
 		case 1:
 			{
+				// should use mkl
 				assert(v.length() == d[1]);
 				Tensor1<T> t1(d[0]);
+
+				// naive matrix-vector product
+				/*
 				for(int i=0, idx=0;i<d[0];i++) {
 					for(int j=0;j<d[1];j++) {
 						t1(i) += data[idx++] * v(j);
 					}
 				}
+				*/
+				
+				cblas_sgemv(CblasRowMajor, CblasNoTrans, d[0], d[1], 1.0,
+					data, d[1], v.rawptr(), 1, 0.0, t1.rawptr(), 1); 
+					
 				return t1;
 				break;
 			}
