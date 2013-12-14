@@ -151,6 +151,34 @@ public:
 		data = new T[r * c];
 	}
 
+	int modeProduct(const Tensor1<T>& v, int mid, Tensor1<T>& t1) {
+		switch( mid ) {
+		case 0:
+			{
+				// should use mkl
+				assert(v.length() == d[0]);
+				
+				// view the tensor as a matrix stored in column major order
+				cblas_sgemv(CblasColMajor, CblasNoTrans, d[1], d[0], 1.0,
+					data, d[1], v.rawptr(), 1, 0.0, t1.rawptr(), 1);
+				return 0;
+			}
+		case 1:
+			{
+				// should use mkl
+				assert(v.length() == d[1]);
+				
+				cblas_sgemv(CblasRowMajor, CblasNoTrans, d[0], d[1], 1.0,
+					data, d[1], v.rawptr(), 1, 0.0, t1.rawptr(), 1);
+				return 0;
+			}
+		default:
+			{
+				throw "invalid mode!";
+			}
+		}
+	}
+
 	Tensor1<T> modeProduct(const Tensor1<T>& v, int mid) {
 		switch( mid ) {
 		case 0:
@@ -423,6 +451,54 @@ public:
 			{
 				throw "Invalid mode!";
 			}
+		}
+	}
+
+	// mode product with a vector
+	int modeProduct(const Tensor1<T>& v, int mid, Tensor2<T>& t2) const {
+		switch( mid ) {
+		case 0:
+			{
+				assert(v.length() == d[0]);
+
+				for(int i=0;i<d[1];i++) {
+					for(int j=0;j<d[2];j++) {
+						T val = 0;
+						for(int k=0;k<d[0];k++)
+							val += data[k](i, j) * v(k);
+						t2(i, j) = val;
+					}
+				}
+				return 0;
+			}
+		case 1:
+			{
+				assert(v.length() == d[1]);
+				for(int i=0;i<d[0];i++) {
+					for(int j=0;j<d[2];j++) {
+						T val = 0;
+						for(int k=0;k<d[1];k++)
+							val += data[i](k, j) * v(k);
+						t2(i, j) = val;
+					}
+				}
+				return 0;
+			}
+		case 2:
+			{
+				assert(v.length() == d[2]);
+				for(int i=0;i<d[0];i++) {
+					for(int j=0;j<d[1];j++) {
+						T val = 0;
+						for(int k=0;k<d[2];k++)
+							val += data[i](j, k) * v(k);
+						t2(i, j) = val;
+					}
+				}
+				return 0;
+			}
+		default:
+			throw "Invalid mode!";
 		}
 	}
 

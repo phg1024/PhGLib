@@ -4,6 +4,8 @@
 #include "DenseVector.hpp"
 #include <armadillo>
 #include "mkl.h"
+#include "cula.h"
+#include "cula_lapack.h"
 
 template <typename T, typename MT>
 MT toMat(const PhGUtils::DenseMatrix<T>& A) {
@@ -22,12 +24,34 @@ lapack_int xgels(int, lapack_int, lapack_int, lapack_int, T*,
 		lapack_int, T*, lapack_int, T*, T, lapack_int*) 
 {}
 
+static void culaCheckStatus(culaStatus status)
+{
+    char buf[256];
+
+    if(!status)
+        return;
+
+    culaGetErrorInfoString(status, culaGetErrorInfo(), buf, sizeof(buf));
+    printf("%s\n", buf);
+
+    culaShutdown();
+	system("pause");
+    exit(EXIT_FAILURE);
+}
+
 template <> lapack_int xgels<float>(int order, lapack_int m, lapack_int n, lapack_int nrhs, 
 							  float* a, lapack_int lda, 
 							  float* b, lapack_int ldb, 
 							  float* s, float rcond, lapack_int* rank) 
 {
 	return LAPACKE_sgelss(order, m, n, nrhs, a, lda, b, ldb, s, rcond, rank);
+	
+	/*
+	// this is slow, don't use it
+	culaStatus stas = culaSgels('N', m, n, nrhs, a, lda, b, ldb);
+	culaCheckStatus(stas);
+	return lapack_int(1);
+	*/
 }
 
 template <> lapack_int xgels<double>(int order, lapack_int m, lapack_int n, lapack_int nrhs, 
