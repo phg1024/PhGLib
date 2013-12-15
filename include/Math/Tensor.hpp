@@ -92,7 +92,6 @@ public:
 	}
 	Tensor2(const Tensor2& other){
 		d[0] = other.d[0]; d[1] = other.d[1];
-		if( data ) delete[] data;
 		data = new T[d[0] * d[1]];
 		memcpy(data, other.data, sizeof(T) * data[0] * data[1]);
 	}
@@ -110,7 +109,10 @@ public:
 	Tensor2<T>& operator=(const Tensor2<T>& other){
 		d[0] = other.d[0];
 		d[1] = other.d[1];
-		data = other.data;
+		if( data ) delete[] data;
+		data = new T[d[0] * d[1]];
+		memcpy(data, other.data, sizeof(T) * data[0] * data[1]);
+
 		return (*this);
 	}
 
