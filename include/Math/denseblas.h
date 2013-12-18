@@ -44,7 +44,7 @@ template <> lapack_int xgels<float>(int order, lapack_int m, lapack_int n, lapac
 							  float* b, lapack_int ldb, 
 							  float* s, float rcond, lapack_int* rank) 
 {
-	return LAPACKE_sgelss(order, m, n, nrhs, a, lda, b, ldb, s, rcond, rank);
+	return LAPACKE_sgelsd(order, m, n, nrhs, a, lda, b, ldb, s, rcond, rank);
 	
 	/*
 	// this is slow, don't use it
@@ -59,7 +59,7 @@ template <> lapack_int xgels<double>(int order, lapack_int m, lapack_int n, lapa
 							  double* b, lapack_int ldb, 
 							  double* s, double rcond, lapack_int* rank) 
 {
-	return LAPACKE_dgelss(order, m, n, nrhs, a, lda, b, ldb, s, rcond, rank);
+	return LAPACKE_dgelsd(order, m, n, nrhs, a, lda, b, ldb, s, rcond, rank);
 }
 
 template <typename T>
@@ -80,6 +80,23 @@ lapack_int leastsquare(PhGUtils::DenseMatrix<T>& A, PhGUtils::DenseVector<T>& b)
 	// call the wrapper
 	return xgels<T>(LAPACK_COL_MAJOR, m, n, 1, A.ptr(), m, b.ptr(), m, 
 		s.ptr(), -1.0, &rank);
+}
+
+// least square solver using normal equation
+lapack_int leastsquare_normalmat(PhGUtils::DenseMatrix<float>& A, PhGUtils::DenseVector<float>& b, 
+								 PhGUtils::DenseMatrix<float>& AtA, PhGUtils::DenseVector<float>& Atb) {
+	lapack_int m = A.rows(), n = A.cols();
+	// compute AtA
+	cblas_ssyrk (CblasRowMajor, CblasUpper, CblasNoTrans, n, m, 1.0, A.ptr(), m, 0, AtA.ptr(), n);
+
+	// compute Atb
+	cblas_sgemv (CblasRowMajor, CblasNoTrans, n, m, 1.0, A.ptr(), m, b.ptr(), 1, 0, Atb.ptr(), 1);
+
+	// compute AtA\Atb, since AtA is only semi-positive definite, we need to use LU-decomposition
+
+	PhGUtils::DenseVector<int> ipiv(n);
+	LAPACKE_ssytrf( LAPACK_COL_MAJOR, 'L', n, AtA.ptr(), n, ipiv.ptr() );
+	return LAPACKE_ssytrs(LAPACK_COL_MAJOR, 'L', n, 1, AtA.ptr(), n, ipiv.ptr(), Atb.ptr(), n);
 }
 
 template <typename T>

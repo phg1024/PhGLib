@@ -30,17 +30,22 @@ public:
 	}
 
 	Tensor1<T>& operator=(const Tensor1<T>& other) {
-		n = other.n;
-		data = new T[n];
-		memcpy(data, other.data, sizeof(T)*n);
+		if( this != &other ) {
+			n = other.n;
+			if( data ) delete[] data;
+			data = new T[n];
+			memcpy(data, other.data, sizeof(T)*n);
+		}
 		return (*this);
 	}
 
 	Tensor1<T>& operator=(Tensor1<T>&& other) {
-		n = other.n;
-		if( data ) delete[] data;
-		data = other.data;
-		other.data = nullptr;
+		if( this != &other ) {
+			n = other.n;
+			if( data ) delete[] data;
+			data = other.data;
+			other.data = nullptr;
+		}
 		return (*this);
 	}
 
@@ -56,6 +61,7 @@ public:
 	}
 	void resize(int size){
 		n = size;
+		if( data ) delete[] data;
 		data = new T[n];
 		memset(data, 0, sizeof(T)*n);
 	}
@@ -107,20 +113,26 @@ public:
 	}
 
 	Tensor2<T>& operator=(const Tensor2<T>& other){
-		d[0] = other.d[0];
-		d[1] = other.d[1];
-		if( data ) delete[] data;
-		data = new T[d[0] * d[1]];
-		memcpy(data, other.data, sizeof(T) * data[0] * data[1]);
+
+		if( this != &other ) {
+			d[0] = other.d[0];
+			d[1] = other.d[1];
+			if( data ) delete[] data;
+			data = new T[d[0] * d[1]];
+			memcpy(data, other.data, sizeof(T) * data[0] * data[1]);
+		}
 
 		return (*this);
 	}
 
 	Tensor2<T>& operator=(Tensor2<T>&& other) {
-		d[0] = other.d[0];
-		d[1] = other.d[1];
-		data = other.data;
-		other.data = nullptr;
+		if( this != &other ) {
+			d[0] = other.d[0];
+			d[1] = other.d[1];
+			if( data ) delete[] data;
+			data = other.data;
+			other.data = nullptr;
+		}
 		return (*this);
 	}
 
@@ -224,7 +236,6 @@ public:
 					data, d[1], v.rawptr(), 1, 0.0, t1.rawptr(), 1); 
 					
 				return t1;
-				break;
 			}
 		default:
 			{

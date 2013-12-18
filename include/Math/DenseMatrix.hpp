@@ -45,7 +45,8 @@ public:
 	DenseMatrix operator*(const DenseMatrix&);
 	DenseMatrix operator*=(double factor);
 
-	DenseVector<T> operator*(const DenseVector<T>&);
+	template <typename MT, typename VT>
+	friend DenseVector<VT> operator*(const DenseMatrix<MT>&, const DenseVector<VT>&);
 	template <typename MT>
 	friend DenseMatrix<MT> operator*(double factor, DenseMatrix<MT>&);
 
@@ -215,6 +216,27 @@ DenseMatrix<T> DenseMatrix<T>::diag(size_t numRows, size_t numCols, T value, int
 }
 
 template <typename T>
+DenseMatrix<T> DenseMatrix<T>::transposed() {
+	// check if the dimension matches
+	if( !isValid() )
+	{
+		fail("DenseMatrix::operator* : input is invalid!");
+		return DenseMatrix<T>();
+	}
+	else
+	{
+		DenseMatrix<T> result(mCols, mRows);
+		for(idx_t i=0;i<mCols;i++) {
+			for(idx_t j=0;j<mRows;j++) {
+				result(i, j) = (*this)(j, i);
+			}
+		}
+
+		return result;
+	}
+}
+
+template <typename T>
 DenseMatrix<T> DenseMatrix<T>::operator +(const DenseMatrix<T> &rhs)
 {
 	// check if the dimension matches
@@ -272,18 +294,47 @@ DenseMatrix<T> DenseMatrix<T>::operator -(const DenseMatrix<T> &rhs)
 	}
 }
 
+template <typename MT, typename T>
+DenseVector<T> operator*(const DenseMatrix<MT>& m, const DenseVector<T>& v) {
+	// check if the dimension matches
+	if( !m.isValid() || !v.isValid() )
+	{
+		fail("DenseMatrix::operator* : input is invalid!");
+		return DenseVector<T>();
+	}
+	else if( v.length() != m.cols() )
+	{
+		fail("DenseMatrix::operator* : input dimensions do not match");
+		return DenseVector<T>();
+	}
+	else
+	{
+		DenseVector<T> result(m.rows());
+
+		for(idx_t r=0;r<m.rows();r++) {
+			T val = 0;
+			for(idx_t c=0;c<m.cols();c++) {
+				val += v(c) * m(r, c);
+			}
+			result(r) = val;
+		}
+
+		return result;
+	}
+}
+
 template <typename T>
 DenseMatrix<T> DenseMatrix<T>::operator *(const DenseMatrix<T> &rhs)
 {
 	// check if the dimension matches
 	if( !isValid() || !rhs.isValid() )
 	{
-		Utility::fail("DenseMatrix::operator* : input is invalid!");
+		fail("DenseMatrix::operator* : input is invalid!");
 		return DenseMatrix<T>();
 	}
 	else if( rhs.rows() != mCols )
 	{
-		Utility::fail("DenseMatrix::operator* : input dimensions do not match");
+		fail("DenseMatrix::operator* : input dimensions do not match");
 		return DenseMatrix<T>();
 	}
 	else

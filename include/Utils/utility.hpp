@@ -101,6 +101,10 @@ namespace PhGUtils {
 		cerr << "Error:\t" << msg << endl;
 	}
 
+	inline void fail(const string& msg) {
+		cerr << "CRITICAL ERROR:\t" << msg << endl;
+	}
+
 	inline void abort(const string& msg) {
 		cerr << "Critical error:\t" << msg << endl;
 		exit(0);
