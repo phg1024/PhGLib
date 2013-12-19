@@ -168,23 +168,24 @@ void jacobian_rotationMatrix(T thetaX, T thetaY, T thetaZ,
 	JRotZ = dzRotationMatrix<T>(thetaZ) * rotY * rotX;
 }
 
-template <typename MT, typename PT>
-/*
- Apply rotation and translation to a list of points
- */
-void applyRotationTranslation(Point3<PT>* res, const Point3<PT>* ori, 
-							  int n, const RigidTransformation& RT, float scale)
-{
-	Matrix3x3<MT> R = RT.rotation();
-	Vector3<PT> T = RT.translation();
 
-	for(int vi=0;vi<n;vi++)
-	{
-		Point3<PT> p(ori[vi]);
-		Point3<PT> Xr = R * p;
-		res[vi] = Xr + T;
-	}
-}
+//template <typename MT, typename PT>
+///*
+// Apply rotation and translation to a list of points
+// */
+//void applyRotationTranslation(Point3<PT>* res, const Point3<PT>* ori, 
+//							  int n, const RigidTransformation& RT, float scale)
+//{
+//	Matrix3x3<MT> R = RT.rotation();
+//	Vector3<PT> T = RT.translation();
+//
+//	for(int vi=0;vi<n;vi++)
+//	{
+//		Point3<PT> p(ori[vi]);
+//		Point3<PT> Xr = R * p;
+//		res[vi] = Xr + T;
+//	}
+//}
 
 template <typename T>
 /* Compute the distance from a point to a line */

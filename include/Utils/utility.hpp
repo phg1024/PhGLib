@@ -85,12 +85,31 @@ namespace PhGUtils {
 		cout << name << " = " << value << endl;
 	}
 
+#if 0
+	// with variadic template support
 	template <typename T, typename ...Args>
 	void debug(const string& name, T value, Args ...args)
 	{
 		cout << name << " = " << value << "\t";
 		debug(args...);
 	}
+#else
+	// without variadic template support
+	template <typename T1, typename T2>
+	void debug(const string& name1, T1 value1, const string& name2, T2 value2)
+	{
+		cout << name1 << " = " << value1 << "\t" << name2 << " = " << value2 << endl;
+	}
+
+	template <typename T1, typename T2>
+	void debug(const string& name1, T1 value1, const string& name2, T2 value2, const string& name3, T2 value3)
+	{
+		cout << name1 << " = " << value1 << "\t" 
+			 << name2 << " = " << value2 << "\t"
+			 << name3 << " = " << value3
+			 << endl;
+	}
+#endif
 
 	// general console message
 	inline void message(const string& msg) {

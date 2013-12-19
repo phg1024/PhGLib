@@ -249,7 +249,7 @@ istream& operator>>(istream& is, Matrix3x3<T>& m)
 template <typename MT, typename VT>
 Vector3<VT> operator*(const Vector3<VT>& v, const Matrix3x3<MT>& m)
 {
-	T x, y, z;
+	VT x, y, z;
 	x = m(0, 0) * v.x + m(0, 1) * v.y + m(0, 2) * v.z;
 	y = m(1, 0) * v.x + m(1, 1) * v.y + m(1, 2) * v.z;
 	z = m(2, 0) * v.x + m(2, 1) * v.y + m(2, 2) * v.z;
@@ -259,7 +259,7 @@ Vector3<VT> operator*(const Vector3<VT>& v, const Matrix3x3<MT>& m)
 template <typename MT, typename PT>
 Point3<PT> operator*(const Point3<PT>& p, const Matrix3x3<MT>& m)
 {
-	T x, y, z;
+	PT x, y, z;
 	x = m(0, 0) * p.x + m(0, 1) * p.y + m(0, 2) * p.z;
 	y = m(1, 0) * p.x + m(1, 1) * p.y + m(1, 2) * p.z;
 	z = m(2, 0) * p.x + m(2, 1) * p.y + m(2, 2) * p.z;
@@ -548,7 +548,7 @@ private:
 template <typename MT, typename VT>
 Vector4<VT> operator*(const Vector4<VT>& v, const Matrix4x4<MT>& m)
 {
-	T x, y, z, w;
+	VT x, y, z, w;
 	x = m[0][0] * v.x + m[0][1] * v.y + m[0][2] * v.z + m[0][3] * v.w;
 	y = m[1][0] * v.x + m[1][1] * v.y + m[1][2] * v.z + m[1][3] * v.w;
 	z = m[2][0] * v.x + m[2][1] * v.y + m[2][2] * v.z + m[2][3] * v.w;
@@ -559,7 +559,7 @@ Vector4<VT> operator*(const Vector4<VT>& v, const Matrix4x4<MT>& m)
 template <typename MT, typename PT>
 Point4<PT> operator*(const Point4<PT>& p, const Matrix4x4<MT>& m)
 {
-	T x, y, z, w;
+	PT x, y, z, w;
 	x = m[0][0] * p.x + m[0][1] * p.y + m[0][2] * p.z + m[0][3] * p.w;
 	y = m[1][0] * p.x + m[1][1] * p.y + m[1][2] * p.z + m[1][3] * p.w;
 	z = m[2][0] * p.x + m[2][1] * p.y + m[2][2] * p.z + m[2][3] * p.w;

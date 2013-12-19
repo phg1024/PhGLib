@@ -1,7 +1,12 @@
 #pragma once
 
 #include "../phgutils.h"
+
+#define USE_ARMADILLO 0
+
+#if USE_ARMADILLO
 #include <armadillo>
+#endif
 #include <mkl.h>
 
 template <typename T>
@@ -99,7 +104,7 @@ public:
 	Tensor2(const Tensor2& other){
 		d[0] = other.d[0]; d[1] = other.d[1];
 		data = new T[d[0] * d[1]];
-		memcpy(data, other.data, sizeof(T) * data[0] * data[1]);
+		memcpy(data, other.data, sizeof(T) * d[0] * d[1]);
 	}
 	Tensor2(Tensor2&& other){
 		d[0] = other.d[0]; d[1] = other.d[1];
@@ -119,7 +124,7 @@ public:
 			d[1] = other.d[1];
 			if( data ) delete[] data;
 			data = new T[d[0] * d[1]];
-			memcpy(data, other.data, sizeof(T) * data[0] * data[1]);
+			memcpy(data, other.data, sizeof(T) * d[0] * d[1]);
 		}
 
 		return (*this);
@@ -260,6 +265,7 @@ public:
 		return t;
 	}
 
+#if USE_ARMADILLO
 	// convert the tensor to an armadillo format matrix
 	arma::fmat toMat() const {
 		arma::fmat m(d[0], d[1]);
@@ -280,6 +286,7 @@ public:
 		}
 		return t;
 	}
+#endif
 
 	void print(const string& title = "") const{
 		if( !title.empty() ) cout << title << " = " << endl;;
@@ -410,7 +417,7 @@ public:
 					throw "Invalid mode!";
 				 }
 		}
-		cout << "done." << endl;
+		//cout << "done." << endl;
 	}
 
 	// fold a order 2 tensor to a order 3 tensor
@@ -561,8 +568,6 @@ public:
 					}
 				}
 				return t2;
-
-				break;
 			}
 		default:
 			throw "Invalid mode!";
@@ -666,11 +671,16 @@ public:
 
 				return Tensor3<T>::fold(t2, 2, d[0], d[1], M.dim(0));
 			}
+		default:
+			{
+				throw "Invalid mode!";
+			}
 		}
 	}
 
+#if USE_ARMADILLO
 	// svd on certain modes, with truncation
-	tuple<Tensor3<T>, vector<Tensor2<T>>> svd(
+	tuple<Tensor3<T>, vector<Tensor2<T> > > svd(
 			const vector<int>& modes,	// modes to perform svd
 			const vector<int>& dims		// truncated dimensions
 		) const
@@ -750,6 +760,8 @@ public:
 		// return the core, U(0) and U(1)
 		return make_tuple(core, tu0, tu1, tu2);
 	}
+#endif
+
 
 	void print(const string& title="") {
 		if( !title.empty() )
