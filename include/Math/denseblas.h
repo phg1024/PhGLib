@@ -93,10 +93,14 @@ lapack_int leastsquare_normalmat(PhGUtils::DenseMatrix<float>& A, PhGUtils::Dens
 	cblas_sgemv (CblasRowMajor, CblasNoTrans, n, m, 1.0, A.ptr(), m, b.ptr(), 1, 0, Atb.ptr(), 1);
 
 	// compute AtA\Atb, since AtA is only semi-positive definite, we need to use LU-decomposition
-
+#if 0
 	PhGUtils::DenseVector<int> ipiv(n);
 	LAPACKE_ssytrf( LAPACK_COL_MAJOR, 'L', n, AtA.ptr(), n, ipiv.ptr() );
 	return LAPACKE_ssytrs(LAPACK_COL_MAJOR, 'L', n, 1, AtA.ptr(), n, ipiv.ptr(), Atb.ptr(), n);
+#else
+	LAPACKE_spotrf( LAPACK_COL_MAJOR, 'L', n, AtA.ptr(), n );
+	return LAPACKE_spotrs( LAPACK_COL_MAJOR, 'L', n, 1, AtA.ptr(), n, Atb.ptr(), n );
+#endif
 }
 
 template <typename T>

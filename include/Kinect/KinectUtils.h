@@ -5,11 +5,11 @@
 #include "../Math/mathutils.hpp"
 
 namespace PhGUtils {
-	inline double rawDepthToMeters( double d ) { 
+	__forceinline double rawDepthToMeters( double d ) { 
 		return d / 1000.0f;
 	}
 
-	inline void depthToWorld(float x, float y, float z, float &X, float &Y, float &Z) {
+	__forceinline void depthToWorld(float x, float y, float z, float &X, float &Y, float &Z) {
 		const double fx_d = 1.0 / 5.9421434211923247e+02;
 		const double fy_d = 1.0 / 5.9104053696870778e+02;
 		const double cx_d = 3.3930780975300314e+02;
@@ -33,7 +33,7 @@ namespace PhGUtils {
 		0, 0, -1.0, 0
 		);
 
-	inline void colorToWorld(float u, float v, float d, float &X, float &Y, float &Z) {
+	__forceinline void colorToWorld(float u, float v, float d, float &X, float &Y, float &Z) {
 		/*
 		// focal length
 		const double fx_rgb = 5.2921508098293293e+02;
@@ -71,7 +71,6 @@ namespace PhGUtils {
 
 		// this creates a mirrored version of the true mesh
 		Z = depth;
-
 	}
 
 	inline void worldToColor(float x, float y, float z, int& u, int& v) {

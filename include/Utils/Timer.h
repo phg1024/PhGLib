@@ -17,10 +17,10 @@ public:
 	void toc();
 	void toc(const string& msg);
 
-	float elapsed() {
+	float elapsed() const {
 		return totalElapse;
 	}
-	float gap() {
+	float gap() const {
         __int64 freq = 0;
 		QueryPerformanceFrequency((LARGE_INTEGER *) &freq);
 		return ((end - start) * 1.0 / freq);
