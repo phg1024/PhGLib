@@ -125,7 +125,9 @@ namespace PhGUtils {
 	}
 
 	inline void abort(const string& msg) {
-		cerr << "Critical error:\t" << msg << endl;
+		cerr << "FATAL ERROR:\t" << msg << endl;
+		cerr << "Abort." << endl;
+		system("pause");
 		exit(0);
 	}
 

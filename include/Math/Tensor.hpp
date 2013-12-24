@@ -298,14 +298,13 @@ public:
 		}
 	}
 
+	T* rawptr() const { return data; }
 	template <typename TT>
 	friend ostream& operator<<(ostream& os, const Tensor2<TT>& t);
 
 private:
 	int d[2];
 	
-	// need to change the underlying data structure to a raw data block of type T
-	//vector<Tensor1<T>> data;
 	// row major storage
 	T* data;
 };

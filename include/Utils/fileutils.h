@@ -14,12 +14,12 @@ string getFileName( const string& filename );
 
 /* write a iteratable item to file */
 template <typename T>
-bool write2file(const T& v, const string& filename)
+bool write2file(const T& v, const string& filename, const string& sep = " ")
 {
 	try{
 		ofstream fout(filename, ios::out);
 		for(auto it=v.begin();it!=v.end();it++) {
-			fout << (*it);
+			fout << (*it) << sep;
 		}
 		fout.close();
 		return true;
