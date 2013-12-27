@@ -390,7 +390,7 @@ public:
 					Tensor2<T> t(d[1], d[0] * d[2]);
 					// fill in the values
 					for(int i=0;i<d[0];i++) {
-						// copy every thing into t
+						// copy everything into t
 						for(int j=0;j<d[1];j++) {
 							for(int k=0, offset=0;k<d[2];k++, offset+=d[0]) {
 								t(j, offset+i) = (*this)(i, j, k);

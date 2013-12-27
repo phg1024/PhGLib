@@ -98,7 +98,8 @@ namespace PhGUtils {
 	template <typename T1, typename T2>
 	void debug(const string& name1, T1 value1, const string& name2, T2 value2)
 	{
-		cout << name1 << " = " << value1 << "\t" << name2 << " = " << value2 << endl;
+		cout << name1 << " = " << value1 << "\t" 
+			 << name2 << " = " << value2 << endl;
 	}
 
 	template <typename T1, typename T2>
