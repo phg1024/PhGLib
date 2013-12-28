@@ -9,6 +9,10 @@ namespace PhGUtils {
 		return d / 1000.0f;
 	}
 
+	__forceinline float metersToRawDepth( float v ) {
+		return v * 1000.0f;
+	}
+
 	/*
 	__forceinline void depthToWorld(float x, float y, float z, float &X, float &Y, float &Z) {
 		const double fx_d = 1.0 / 5.9421434211923247e+02;
@@ -54,7 +58,7 @@ namespace PhGUtils {
 	}
 
 	// inverse function of colorToWorld
-	__forceinline void worldToColor(float x, float y, float z, float& u, float& v) {
+	__forceinline void worldToColor(float x, float y, float z, float& u, float& v, float& d) {
 		// focal length
 		const float fx_rgb = 525.0, fy_rgb = 525.0;
 		// for 640x480 image
@@ -63,6 +67,7 @@ namespace PhGUtils {
 		float invZ = 1.0 / z;
 		u = clamp<float>(cx_rgb + x * fx_rgb * invZ, 0, 639.f);
 		v = clamp<float>(cy_rgb + y * fy_rgb * invZ, 0, 479.f);
+		d = -metersToRawDepth(z);
 	}
 
 }
