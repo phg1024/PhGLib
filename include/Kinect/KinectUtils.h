@@ -51,7 +51,7 @@ namespace PhGUtils {
 		float depth = -rawDepthToMeters(d);
 
 		// inverse mapping of projection
-		X = (u - cx_rgb) * depth / fx_rgb;
+		X = -(u - cx_rgb) * depth / fx_rgb;
 		Y = (v - cy_rgb) * depth / fy_rgb;
 
 		Z = depth;
@@ -65,7 +65,7 @@ namespace PhGUtils {
 		const float cx_rgb = 320.0, cy_rgb = 240.0;
 
 		float invZ = 1.0 / z;
-		u = clamp<float>(cx_rgb + x * fx_rgb * invZ, 0, 639.f);
+		u = clamp<float>(cx_rgb - x * fx_rgb * invZ, 0, 639.f);
 		v = clamp<float>(cy_rgb + y * fy_rgb * invZ, 0, 479.f);
 		d = -metersToRawDepth(z);
 	}
