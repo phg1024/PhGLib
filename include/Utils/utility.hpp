@@ -75,6 +75,19 @@ namespace PhGUtils {
 		}
 	}
 
+	template <typename T>
+	void print2DArray(T* A, int rows, int cols, ostream& os = cout)
+	{
+		for(int i=0, idx=0;i<rows;i++)
+		{
+			for(int j=0;j<cols;j++)
+			{
+				os << A[idx++] << ' ';
+			}
+			os << endl;
+		}
+	}
+
 	// debugging related
 	// dummy
 	static void debug(){}
