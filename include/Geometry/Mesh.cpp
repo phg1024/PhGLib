@@ -1,6 +1,7 @@
 #include "Mesh.h"
 #include "GL/glut.h"
 #include "MeshLoader.h"
+#include "geometryutils.hpp"
 
 namespace PhGUtils {
 // ----------------------------------------------------------------------------
@@ -13,6 +14,14 @@ void TriMesh::draw()
 	glVertexPointer(3, GL_FLOAT, 0, reinterpret_cast<float*>(&(v[0])));
 	glDrawArrays( GL_TRIANGLES, 0,  nFaces*3);					// Draw All Of The Triangles At Once
 	glDisableClientState( GL_VERTEX_ARRAY );					// Disable Vertex Arrays
+}
+
+void TriMesh::drawFrame() {
+
+}
+
+void TriMesh::drawFaceIndices() {
+
 }
 
 // ----------------------------------------------------------------------------
@@ -37,6 +46,31 @@ void QuadMesh::drawFrame() {
 	}
 }
 
+void QuadMesh::drawFaceIndices()
+{
+	glBegin(GL_QUADS);
+
+	for(int i=0;i<nFaces;i++) {
+		face_t& f = face(i);
+		//face_t& fn = faceNormal(i);
+		vert_t& v1 = vertex(f.x);
+		vert_t& v2 = vertex(f.y);
+		vert_t& v3 = vertex(f.z);
+		vert_t& v4 = vertex(f.w);
+				
+		float r, g, b;
+		encodeIndex<float>(i, r, g, b);
+		glColor4f(r, g, b, 1.0);
+
+		glVertex3f(v1.x, v1.y, v1.z);
+		glVertex3f(v2.x, v2.y, v2.z);
+		glVertex3f(v3.x, v3.y, v3.z);
+		glVertex3f(v4.x, v4.y, v4.z);
+	}
+
+	glEnd();
+}
+
 void QuadMesh::draw()
 {
 	for(int i=0;i<nFaces;i++) {
@@ -46,6 +80,7 @@ void QuadMesh::draw()
 		vert_t& v2 = vertex(f.y);
 		vert_t& v3 = vertex(f.z);
 		vert_t& v4 = vertex(f.w);
+
 		//norm_t& n1 = normal(fn.x);
 		//norm_t& n2 = normal(fn.y);
 		//norm_t& n3 = normal(fn.z);

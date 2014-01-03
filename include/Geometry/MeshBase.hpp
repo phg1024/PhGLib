@@ -71,6 +71,7 @@ public:
 
 	virtual void draw() = 0;
 	virtual void drawFrame() = 0;
+	virtual void drawFaceIndices() = 0;
 
 protected:
 	size_t nVerts, nFaces;

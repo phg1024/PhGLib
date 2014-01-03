@@ -35,7 +35,7 @@ namespace PhGUtils {
 	static const Matrix4x4f KinectColorProjection(
 		525.0/320.0, 0, 0, 0,
 		0, 525.0/240.0, 0, 0,
-		0, 0, -1.0, 0,
+		0, 0, -10.001/9.999, -0.02/9.999,	// near 0.001, far 10.0
 		0, 0, -1.0, 0
 		);
 

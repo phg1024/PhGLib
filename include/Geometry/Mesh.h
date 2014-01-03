@@ -24,6 +24,7 @@ public:
 
 	virtual void draw();
 	virtual void drawFrame();
+	virtual void drawFaceIndices();
 
 	friend class OBJLoader;
 private:
@@ -48,6 +49,7 @@ public:
 
 	virtual void draw();
 	virtual void drawFrame();
+	virtual void drawFaceIndices();
 
 	friend class OBJLoader;
 private:
@@ -69,6 +71,7 @@ public:
 
 	virtual void draw();
 	virtual void drawFrame();
+	virtual void drawFaceIndices();
 
 private:
 };

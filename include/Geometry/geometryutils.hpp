@@ -168,6 +168,33 @@ void jacobian_rotationMatrix(T thetaX, T thetaY, T thetaZ,
 	JRotZ = dzRotationMatrix<T>(thetaZ) * rotY * rotX;
 }
 
+template <typename T>
+__forceinline void encodeIndex(int idx, T& r, T& g, T& b, T scaler = 255.0) {
+	r = ((idx >> 16) & 0xff) / scaler;
+	g = ((idx >>  8) & 0xff) / scaler;
+	b = ( idx		 & 0xff) / scaler;
+}
+
+template <typename T>
+__forceinline void decodeIndex(T r, T g, T b, int& idx, T scaler = 255.0) {
+	int ri = r * scaler;
+	int gi = g * scaler;
+	int bi = b * scaler;
+	idx = (ri << 16) | (gi << 8) | bi;
+}
+
+template <>
+__forceinline void encodeIndex(int idx, int& r, int& g, int& b, int scaler) {
+	r = (idx >> 16) & 0xff;
+	g = (idx >> 8) & 0xff;
+	b = idx & 0xff;
+}
+
+template <>
+__forceinline void decodeIndex(int r, int g, int b, int& idx, int scaler) {
+	idx = (r << 16) | (g << 8) | b;
+}
+
 
 //template <typename MT, typename PT>
 ///*
