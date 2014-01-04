@@ -30,6 +30,7 @@ namespace PhGUtils {
 		return pixmap;
 	}
 
+	// assumes BGR format
 	static QImage toQImage(const unsigned char* data, int w, int h) {
 		QImage qimg(w, h, QImage::Format_ARGB32);
 		for(int i=0, idx=0;i<h;i++) {
