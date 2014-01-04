@@ -228,4 +228,101 @@ float lineToPointDistance(const Point3<T>& lp1, const Point3<T>& lp2,
 	return k.normSquared() / dir.normSquared();
 }
 
+template <typename T>
+float pointToTriangleDistance(const Point3<T>& p0, 
+						  const Point3<T>& p1, const Point3<T>& p2, const Point3<T>& p3,
+						  Point3<T>& hit
+						  ) 
+{
+	float dist = 0;
+
+	Vector3<T> d(p0, p1);
+
+	Vector3<T> e12(p1, p2), e13(p1, p3), e21(p2, p1), e23(p2, p3), e31(p3, p1), e32(p3, p2);
+
+	Vector3<T> e12n = e12.normalized();
+	Vector3<T> e13n = e13.normalized();
+	Vector3<T> e21n = e21.normalized();
+	Vector3<T> e23n = e23.normalized();
+	Vector3<T> e31n = e31.normalized();
+	Vector3<T> e32n = e32.normalized();
+
+	Vector3<T> n(e12, e13);
+	n.normalize();
+
+	float dDOTn = d.dot(n);
+	float dnorm = d.norm();
+	float cosAlpha = dDOTn / dnorm;
+
+	float dn = dDOTn * cosAlpha;
+	Vector3<T> p0p0c = -dn * n;
+	Point3<T> p0c = p0 + p0p0c;
+
+	Vector3<T> v1 = e21n + e31n, v2 = e12n + e32n, v3 = e13n + e23n;
+	Vector3<T> p0cp1(p0c, p1), p0cp2(p0c, p2), p0cp3(p0c, p3);
+
+	Vector3<T> c1(p0cp1, p0cp2), c2(p0cp2, p0cp3), c3(p0cp3, p0cp1);
+
+	T d1 = c1.dot(n);
+	T d2 = c2.dot(n);
+	T d3 = c3.dot(n);
+
+	Point3<T> x0 = p0c, x1, x2;
+	bool inside = true;
+	if ( d1 < d2 && d1 < d3 && d1<0 )			//-- outside, p1, p2 side
+	{
+		inside = false;		
+		x1 = p1; x2 = p2;
+	}
+	else if ( d2 < d1 && d2 < d3 && d2<0 )	//-- outside, p2, p3 side
+	{
+		inside = false;
+		x1 = p2; x2 = p3;
+	}
+	else if ( d3 < d1 && d3 < d2 && d3<0 )	//-- outside, p3, p1 side
+	{
+		inside = false;
+		x1 = p3; x2 = p1;
+	}
+
+	if (inside)
+	{
+		hit = p0c;
+		dist = dn;
+	}
+	else
+	{
+		Vector3<T> x1x0(x1, x0), x2x0(x2, x0), x2x1(x2, x1);
+		T L_x2x0 = x2x0.norm();
+		T t = x1x0.dot(x2x0) / (L_x2x0 * L_x2x0);
+
+		hit = x1 + t * x2x1;
+
+		Vector3<T> line(hit, p0);
+		dist = line.norm();
+	}
+
+	return dist;
+}
+
+template <typename T>
+void computeBarycentricCoordinates(const Point3<T>& p, 
+								   const Point3<T>& q1, const Point3<T>& q2, const Point3<T>& q3,
+								   float bcoords[3]) 
+{
+	Vector3<T> e23(q2, q3), e21(q2, q1), e31(q3, q1);
+	Vector3<T> d2(q2, p), d3(q3, p);
+	Vector3<T> oriN(e23, e21);
+	Vector3<T> n = oriN.normalized();
+
+	T btn = oriN.dot(n);
+
+	T t1 = (e23.cross(d2)).dot(n) / btn;
+	T t2 = (e31.cross(d3)).dot(n) / btn;
+	T t3 = 1 - t1 - t2;
+
+	bcoords[0] = t1;
+	bcoords[1] = t2;
+	bcoords[2] = t3;
+}
 }
