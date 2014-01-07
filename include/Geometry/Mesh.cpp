@@ -123,6 +123,20 @@ void QuadMesh::initWithLoader( const MeshLoader& loader )
 	}
 	n = norms;
 	t = texcoords;
+
+	buildVertexFaceMap();
+}
+
+void QuadMesh::buildVertexFaceMap()
+{
+	for(size_t i=0;i<f.size();i++) {
+		face_t& f = face(i);
+
+		helper.vfmap[f.x].insert(i);
+		helper.vfmap[f.y].insert(i);
+		helper.vfmap[f.z].insert(i);
+		helper.vfmap[f.w].insert(i);
+	}
 }
 
 // ----------------------------------------------------------------------------

@@ -69,9 +69,16 @@ public:
 		return n[idx];
 	}
 
+	const set<int>& incidentFaces(size_t idx) const {
+		return helper.vfmap.at(idx);
+	}
+
 	virtual void draw() = 0;
 	virtual void drawFrame() = 0;
 	virtual void drawFaceIndices() = 0;
+
+protected:
+	virtual void buildVertexFaceMap() = 0;
 
 protected:
 	size_t nVerts, nFaces;
@@ -81,6 +88,9 @@ protected:
 	vector<vert_t> v;
 	vector<norm_t> n;
 	vector<texcoord_t> t;
-};
 
+	struct MeshHelper {
+		map<int, set<int>> vfmap;		// vertex to face map
+	} helper;
+};
 }
