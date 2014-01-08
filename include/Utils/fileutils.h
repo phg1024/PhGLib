@@ -29,4 +29,17 @@ bool write2file(const T& v, const string& filename, const string& sep = " ")
 		return false;
 	}
 }
+
+template <typename Func>
+bool write2file(const string& filename, Func f) {
+	ofstream fout(filename);
+
+	if( !fout ) return false;
+
+	f(fout);
+
+	fout.close();
+
+	return true;
+}
 }

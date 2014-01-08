@@ -89,6 +89,11 @@ namespace PhGUtils {
 		}
 	}
 
+	template <typename T>
+	void dump2DArray(T* A, int rows, int cols, ostream& os = cout) {
+		os.write(reinterpret_cast<const char*>(A), sizeof(T)*rows*cols);
+	}
+
 	// debugging related
 	// dummy
 	static void debug(){}
