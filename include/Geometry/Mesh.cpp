@@ -129,6 +129,8 @@ void QuadMesh::initWithLoader( const MeshLoader& loader )
 
 void QuadMesh::buildVertexFaceMap()
 {
+	helper.vfmap.resize(v.size());
+
 	for(size_t i=0;i<f.size();i++) {
 		face_t& f = face(i);
 

@@ -90,7 +90,7 @@ protected:
 	vector<texcoord_t> t;
 
 	struct MeshHelper {
-		map<int, set<int>> vfmap;		// vertex to face map
+		vector<set<int>> vfmap;		// vertex to face map
 	} helper;
 };
 }
