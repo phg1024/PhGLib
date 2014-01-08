@@ -325,4 +325,105 @@ void computeBarycentricCoordinates(const Point3<T>& p,
 	bcoords[1] = t2;
 	bcoords[2] = t3;
 }
+
+template <typename T>
+bool isInside(const Point2<T>& p, const vector<Point2<T>>& convex) {
+
+	int pos=0, neg=0;
+	for(int i=0;i<convex.size();i++) {
+		int cur = i;
+		int nxt = i+1;
+		nxt = nxt>(convex.size()-1)?0:nxt;
+
+		const Point2<T>& pc = convex[cur];
+		const Point2<T>& pn = convex[nxt];
+		// check the sideness of current edge
+		Point2<T> e(pn.x-pc.x, pn.y-pc.y);
+		Vector2<T> n(e.y, -e.x);
+		n.normalize();		
+
+		float dx = p.x - pc.x, dy = p.y - pc.y;
+		float d = n.x * dx + n.y * dy;
+
+		// if the point is on an edge, count it as inside
+		if( d >= 1e-3 ) pos++;
+		else if( d < 1e-3 ) neg++;
+		else return true;
+	}
+
+	return (pos == 0 || neg == 0);
+}
+
+// To find orientation of ordered triplet (p, q, r).
+// The function returns following values
+// 0 --> p, q and r are colinear
+// 1 --> Clockwise
+// 2 --> Counterclockwise
+template <typename T>
+int orientation(const Point2<T>& p, const Point2<T>& q, const Point2<T>& r)
+{
+	int val = (q.y - p.y) * (r.x - q.x) -
+		(q.x - p.x) * (r.y - q.y);
+
+	if (val == 0) return 0;  // colinear
+	return (val > 0)? 1: 2; // clock or counterclock wise
+}
+
+template <typename T>
+vector<Point2<T>> convexHull(const vector<Point2<T>>& inPts) {
+
+	typedef typename Point2<T> point_t;
+
+	vector<point_t> pts = inPts;
+	int n = pts.size();
+	// at least 3 points
+	if( n < 3 ) return vector<point_t>();
+	
+	// Initialize Result
+	vector<int> next(n, -1);
+
+	// find the left most point
+	int l=0;
+	for(int i=0;i<n;i++) {
+		if( pts[i].x < pts[l].x ) l = i;
+	}
+	// swap them
+	point_t tmp = pts[0];
+	pts[0] = pts[l];
+	pts[l] = tmp;
+
+	// sort the points by angle to point 0
+	std::sort(pts.begin()+1, pts.end(), [&](const point_t& a, const point_t& b){
+		float x1 = a.x - pts[0].x, y1 = a.y - pts[0].y;	
+		float l1 = x1 * x1 + y1 * y1;
+		float x2 = b.x - pts[0].x, y2 = b.y - pts[0].y;
+		float l2 = x2 * x2 + y2 * y2;
+		return y1/l1 < y2/l2;
+	});
+
+	// Start from leftmost point, keep moving counterclockwise
+	// until reach the start point again
+	int p = 0, q;
+	do
+	{
+		// Search for a point 'q' such that orientation(p, i, q) is
+		// counterclockwise for all points 'i'
+		q = (p+1)%n;
+		for (int i = 0; i < n; i++)
+			if (orientation(pts[p], pts[i], pts[q]) == 2)
+				q = i;
+
+		next[p] = q;  // Add q to result as a next point of p
+		p = q; // Set p as q for next iteration
+	} while (p != 0);
+
+	vector<point_t> hull;
+	// Collect Result
+	for (int i = 0; i < n; i++)
+	{
+		if (next[i] != -1) hull.push_back(pts[i]);
+	}
+
+	return hull;
+}
 }
