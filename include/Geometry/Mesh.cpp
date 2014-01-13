@@ -24,6 +24,18 @@ void TriMesh::drawFaceIndices() {
 
 }
 
+void TriMesh::initWithLoader(const MeshLoader& loader)
+{
+
+}
+
+void TriMesh::buildVertexFaceMap()
+{
+
+}
+
+
+
 // ----------------------------------------------------------------------------
 // Quad mesh
 // ----------------------------------------------------------------------------

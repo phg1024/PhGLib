@@ -26,7 +26,10 @@ public:
 	virtual void drawFrame();
 	virtual void drawFaceIndices();
 
+protected:
 	friend class OBJLoader;
+	virtual void buildVertexFaceMap();
+
 private:
 };
 
