@@ -150,6 +150,10 @@ DenseMatrix<T>& DenseMatrix<T>::operator=(DenseMatrix&& other)
 {
 	if (this != &other)
 	{
+		// Free the existing resource.
+		if( mElems != nullptr )
+			delete[] mElems;
+
 		mRows = other.mRows;
 		mCols = other.mCols;
 		mElems = other.mElems;
