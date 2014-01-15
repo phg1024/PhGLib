@@ -15,6 +15,10 @@ template <typename T>
 class Point2
 {
 public:
+	enum Coordinate {
+		X = 0, 
+		Y = 1
+	};
 	typedef T elem_t;
 	Point2(void):x(0), y(0){}
 	~Point2(void){}
@@ -81,6 +85,26 @@ public:
 		cout << (title.empty()?"":title + " = (") << x << ", " << y << ")" << endl;
 	}
 
+	elem_t operator[](Coordinate c) const {
+		if( c == X ) return x;
+		else return y;
+	}
+
+	elem_t& operator[](Coordinate c) {
+		if( c == X ) return x;
+		else return y;
+	}
+
+	elem_t operator[](int c) const {
+		if( c == X ) return x;
+		else return y;
+	}
+
+	elem_t& operator[](int c) {
+		if( c == X ) return x;
+		else return y;
+	}
+
 	elem_t x, y;
 };
 
@@ -108,6 +132,11 @@ template <typename T>
 class Point3 : public Point2<T>
 {
 public:
+	enum Coordinate {
+		X = 0,
+		Y = 1,
+		Z = 2
+	};
 	typedef T elem_t;
 	Point3(void):Point2(),z(0){}
 	~Point3(void){}
@@ -186,6 +215,30 @@ public:
 	template <typename PT>
 	friend istream& operator>>(istream& is, Point3& p);
 
+	elem_t operator[](Coordinate c) const {
+		if( c == X ) return x;
+		else if( c == Y ) return y;
+		else return z;
+	}
+
+	elem_t& operator[](Coordinate c) {
+		if( c == X ) return x;
+		else if( c == Y ) return y;
+		else return z;
+	}
+
+	elem_t operator[](int c) const {
+		if( c == X ) return x;
+		else if( c == Y ) return y;
+		else return z;
+	}
+
+	elem_t& operator[](int c) {
+		if( c == X ) return x;
+		else if( c == Y ) return y;
+		else return z;
+	}
+
 	T z;
 };
 
@@ -219,6 +272,12 @@ template <typename T>
 class Point4 : public Point3<T>
 {
 public:
+	enum Coordinate {
+		X = 0,
+		Y = 1,
+		Z = 2, 
+		W = 3
+	};
 	typedef T elem_t;
 	Point4(void):Point3(){}
 	~Point4(void){}
@@ -269,6 +328,34 @@ public:
 	friend ostream& operator<<(ostream& os, const Point4<PT>& p);
 	template <typename PT>
 	friend istream& operator>>(istream& is, Point4& p);
+
+	elem_t operator[](Coordinate c) const {
+		if( c == X ) return x;
+		else if( c == Y ) return y;
+		else if( c == Z ) return z;
+		else return w;
+	}
+
+	elem_t& operator[](Coordinate c) {
+		if( c == X ) return x;
+		else if( c == Y ) return y;
+		else if( c == Z ) return z;
+		else return w;
+	}
+
+	elem_t operator[](int c) const {
+		if( c == X ) return x;
+		else if( c == Y ) return y;
+		else if( c == Z ) return z;
+		else return w;
+	}
+
+	elem_t& operator[](int c) {
+		if( c == X ) return x;
+		else if( c == Y ) return y;
+		else if( c == Z ) return z;
+		else return w;
+	}
 
 	T w;
 };

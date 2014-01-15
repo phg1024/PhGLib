@@ -22,13 +22,20 @@ public:
 
 	virtual void initWithLoader(const MeshLoader& loader);
 
-	virtual void draw();
-	virtual void drawFrame();
-	virtual void drawFaceIndices();
+	virtual void draw() const;
+	virtual void drawFrame() const;
+	virtual void drawFaceIndices() const;
+
+	virtual float findClosestPoint_bruteforce(const Point3f& p, Point3i& vts, Point3f& bcoords);
+	virtual float findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords, float distThreshold);
 
 protected:
+	friend class MeshViewer;
 	friend class OBJLoader;
+	template <typename T> friend class AABBTree;
+
 	virtual void buildVertexFaceMap();
+	virtual void buildAABB();
 
 private:
 };
@@ -50,14 +57,21 @@ public:
 
 	virtual void initWithLoader(const MeshLoader& loader);
 
-	virtual void draw();
-	virtual void drawFrame();
-	virtual void drawFaceIndices();
+	virtual void draw() const;
+	virtual void drawFrame() const;
+	virtual void drawFaceIndices() const;
+
+	virtual float findClosestPoint_bruteforce(const Point3f& p, Point3i& vts, Point3f& bcoords);
+	virtual float findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords, float distThreshold);
 
 protected:
-	virtual void buildVertexFaceMap();
-
+	friend class MeshViewer;
 	friend class OBJLoader;
+	template <typename T> friend class AABBTree;
+
+	virtual void buildVertexFaceMap();
+	virtual void buildAABB();
+
 private:
 };
 
