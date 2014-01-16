@@ -38,6 +38,9 @@ public:
 	{
 		return x == p.x && y == p.y;
 	}
+	bool operator==(elem_t val) const {
+		return x == val && y == val;
+	}
 
 	// unitary operators
 	Point2 operator+(){ return (*this); }
@@ -158,6 +161,9 @@ public:
 	bool operator==(const Point2& p) const
 	{
 		return x == p.x && y == p.y;
+	}
+	bool operator==(elem_t val) const {
+		return x == val && y == val && z == val;
 	}
 
 	// unitary operators
@@ -299,13 +305,17 @@ public:
 		return x == p.x && y == p.y && z == p.z && w == p.w;
 	}
 
+	bool operator==(elem_t val) const {
+		return x == val && y == val && z == val && w == val;
+	}
+
 	// unitary operators
 	Point4 operator+(){ return (*this); }
 	Point4 operator-(){ return Point4(-x, -y, -z, -w); }
 
 	// arithmetic operators
-	Point4 operator+(const Point4& p){ return Point4(x+p.x, y+p.y, z+p.z, w+p.w); }
-	Point4 operator-(const Point4& p){ return Point4(x-p.x, y-p.y, z-p.z, w-p.w); }
+	Point4 operator+(const Point4& p) const{ return Point4(x+p.x, y+p.y, z+p.z, w+p.w); }
+	Point4 operator-(const Point4& p) const{ return Point4(x-p.x, y-p.y, z-p.z, w-p.w); }
 
 	template <typename FT>
 	Point4 operator*(FT factor){ return Point4(x*factor, y*factor, z*factor, w*factor); }

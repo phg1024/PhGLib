@@ -27,6 +27,10 @@ public:
 		updateViewingParameters();
 	}
 
+	void bindHints(const vector<pair<int, int>>& h) {
+		hints = h;
+	}
+
 protected:
 	void initializeGL();
 	void paintGL();
@@ -45,6 +49,7 @@ private:
 	shared_ptr<QuadMesh> quad;
 	shared_ptr<TriMesh> tri;
 
+	vector<pair<int, int>> hints;
 	shared_ptr<AABBTree<float>> aabb;
 	Point3f massCenter;
 	float scale;

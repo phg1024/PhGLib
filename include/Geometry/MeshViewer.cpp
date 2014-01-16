@@ -48,6 +48,30 @@ namespace PhGUtils {
 		// for debug, show the aabb tree
 		//aabb->paint();
 
+		GLfloat mat_diffuse[] = {1.0, 0.375, 0.375, 1.0};
+		glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, mat_diffuse);
+		for(int i=0;i<hints.size();i++) {
+			glPushMatrix();
+			Point3f p;
+
+			switch (type)
+			{
+			case PhGUtils::MeshViewer::QUAD_MESH:
+				p = quad->vertex(hints[i].first);
+				break;
+			case PhGUtils::MeshViewer::TRIANGLE_MESH:
+				p = tri->vertex(hints[i].first);
+				break;
+			default:
+				break;
+			}
+
+			glTranslatef(p.x, p.y, p.z);
+			glutSolidSphere(5, 16, 16);
+
+			glPopMatrix();
+		}
+
 		glPopMatrix();
 
 		disableLighting();

@@ -5,7 +5,7 @@
 namespace PhGUtils {
 class MeshLoader;
 
-class TriMesh : MeshBase<Point3f, Point3i>
+class TriMesh : public MeshBase<Point3f, Point3i>
 {
 public:
 	typedef MeshBase<Point3f, Point3i> base_t;
@@ -30,10 +30,6 @@ public:
 	virtual float findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords, float distThreshold);
 
 protected:
-	friend class MeshViewer;
-	friend class OBJLoader;
-	template <typename T> friend class AABBTree;
-
 	virtual void buildVertexFaceMap();
 	virtual void buildAABB();
 
@@ -65,10 +61,6 @@ public:
 	virtual float findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords, float distThreshold);
 
 protected:
-	friend class MeshViewer;
-	friend class OBJLoader;
-	template <typename T> friend class AABBTree;
-
 	virtual void buildVertexFaceMap();
 	virtual void buildAABB();
 
@@ -92,6 +84,8 @@ public:
 	virtual void draw();
 	virtual void drawFrame();
 	virtual void drawFaceIndices();
+
+protected:
 
 private:
 };

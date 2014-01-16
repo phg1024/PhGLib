@@ -84,6 +84,13 @@ public:
 	virtual float findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords, float distThreshold) = 0;
 
 protected:
+	template <typename T> friend class AABBTree;
+	friend class MeshViewer;
+	friend class OBJLoader;
+	friend class PLYLoader;
+	friend class OBJWriter;
+	friend class PLYWriter;
+
 	virtual void buildVertexFaceMap() = 0;
 	virtual void buildAABB() = 0;
 

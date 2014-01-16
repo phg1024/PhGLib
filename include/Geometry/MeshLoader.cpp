@@ -198,15 +198,14 @@ bool OBJLoader::load(const string& filename) {
 						vtidx = atoi((*vit).c_str());
 						vit++;
 						if( vtidx < 0 ) vtidx = -vtidx;
-						f.t.push_back(vtidx - 1);
+						f.t.push_back(std::max(vtidx - 1, 0));
 
 					}
 					if( vit != vlist.end() )
 					{
 						vnidx = atoi((*vit).c_str());
 						if( vnidx < 0 ) vnidx = -vnidx;
-
-						f.n.push_back(vnidx - 1);
+						f.n.push_back(std::max(vnidx - 1, 0));
 					}
 					//cout << vidx << ", ";
 				}
