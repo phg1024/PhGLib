@@ -7,6 +7,8 @@
 namespace PhGUtils {
 class MeshLoader;
 
+template <typename T> class AABBTree;
+
 template <typename VT, typename FT>
 class MeshBase
 {
@@ -73,12 +75,26 @@ public:
 		return helper.vfmap.at(idx);
 	}
 
-	virtual void draw() = 0;
-	virtual void drawFrame() = 0;
-	virtual void drawFaceIndices() = 0;
+	virtual void draw() const = 0;
+	virtual void drawFrame() const = 0;
+	virtual void drawFaceIndices() const = 0;
+
+	virtual void updateAABB() { buildAABB(); }
+
+	// helper functions
+	virtual float findClosestPoint_bruteforce(const Point3f& p, Point3i& vts, Point3f& bcoords) = 0;
+	virtual float findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords, float distThreshold) = 0;
 
 protected:
+	template <typename T> friend class AABBTree;
+	friend class MeshViewer;
+	friend class OBJLoader;
+	friend class PLYLoader;
+	friend class OBJWriter;
+	friend class PLYWriter;
+
 	virtual void buildVertexFaceMap() = 0;
+	virtual void buildAABB() = 0;
 
 protected:
 	size_t nVerts, nFaces;
@@ -91,6 +107,7 @@ protected:
 
 	struct MeshHelper {
 		vector<set<int>> vfmap;		// vertex to face map
+		shared_ptr<AABBTree<float>> aabb;
 	} helper;
 };
 }

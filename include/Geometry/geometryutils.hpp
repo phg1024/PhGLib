@@ -308,7 +308,7 @@ float pointToTriangleDistance(const Point3<T>& p0,
 template <typename T>
 void computeBarycentricCoordinates(const Point3<T>& p, 
 								   const Point3<T>& q1, const Point3<T>& q2, const Point3<T>& q3,
-								   float bcoords[3]) 
+								   Point3f& bcoords) 
 {
 	Vector3<T> e23(q2, q3), e21(q2, q1), e31(q3, q1);
 	Vector3<T> d2(q2, p), d3(q3, p);
@@ -321,9 +321,9 @@ void computeBarycentricCoordinates(const Point3<T>& p,
 	T t2 = (e31.cross(d3)).dot(n) / btn;
 	T t3 = 1 - t1 - t2;
 
-	bcoords[0] = t1;
-	bcoords[1] = t2;
-	bcoords[2] = t3;
+	bcoords.x = t1;
+	bcoords.y = t2;
+	bcoords.z = t3;
 }
 
 template <typename T>

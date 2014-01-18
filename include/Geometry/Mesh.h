@@ -5,7 +5,7 @@
 namespace PhGUtils {
 class MeshLoader;
 
-class TriMesh : MeshBase<Point3f, Point3i>
+class TriMesh : public MeshBase<Point3f, Point3i>
 {
 public:
 	typedef MeshBase<Point3f, Point3i> base_t;
@@ -22,11 +22,17 @@ public:
 
 	virtual void initWithLoader(const MeshLoader& loader);
 
-	virtual void draw();
-	virtual void drawFrame();
-	virtual void drawFaceIndices();
+	virtual void draw() const;
+	virtual void drawFrame() const;
+	virtual void drawFaceIndices() const;
 
-	friend class OBJLoader;
+	virtual float findClosestPoint_bruteforce(const Point3f& p, Point3i& vts, Point3f& bcoords);
+	virtual float findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords, float distThreshold);
+
+protected:
+	virtual void buildVertexFaceMap();
+	virtual void buildAABB();
+
 private:
 };
 
@@ -47,14 +53,17 @@ public:
 
 	virtual void initWithLoader(const MeshLoader& loader);
 
-	virtual void draw();
-	virtual void drawFrame();
-	virtual void drawFaceIndices();
+	virtual void draw() const;
+	virtual void drawFrame() const;
+	virtual void drawFaceIndices() const;
+
+	virtual float findClosestPoint_bruteforce(const Point3f& p, Point3i& vts, Point3f& bcoords);
+	virtual float findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords, float distThreshold);
 
 protected:
 	virtual void buildVertexFaceMap();
+	virtual void buildAABB();
 
-	friend class OBJLoader;
 private:
 };
 
@@ -75,6 +84,8 @@ public:
 	virtual void draw();
 	virtual void drawFrame();
 	virtual void drawFaceIndices();
+
+protected:
 
 private:
 };
