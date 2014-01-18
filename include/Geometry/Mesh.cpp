@@ -309,7 +309,62 @@ float QuadMesh::findClosestPoint_bruteforce(const Point3f& p, Point3i& vts, Poin
 
 float QuadMesh::findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords, float distThreshold)
 {
-	throw lazy_exception();
+	// construct an AABB around the query point
+	AABB<float> aabb(
+		p - Point3f(distThreshold, distThreshold, distThreshold),
+		p + Point3f(distThreshold, distThreshold, distThreshold)
+		);
+
+	// finds closest point with AABB tree
+	typedef const AABBNode<float>* node_cptr;
+	// traverse the tree and examine all leaf nodes within distance threshold
+	queue<node_cptr> Q;
+	Q.push(helper.aabb->root());
+	
+	float closestDist = numeric_limits<float>::max();
+
+	while( Q.size() ) {
+		node_cptr n = Q.front();
+		Q.pop();
+
+		if( n->faceIdx == AABBNode<float>::INTERNAL_NODE ) {
+			// check children
+			node_cptr l = n->leftChild;
+			// check left child intersection
+			if( l->aabb.intersectsAABB(aabb) ) Q.push(l);
+
+			node_cptr r = n->rightChild;
+			// check right child intersection
+			if( r->aabb.intersectsAABB(aabb) ) Q.push(r);
+		}
+		else if( n->faceIdx == AABBNode<float>::EMPTY_NODE ) {
+			continue;
+		}
+		else if( n->faceIdx > 0 ) {			
+			// leaf node, compute point-face distance
+			face_t face = f[n->faceIdx];
+			Point3f hit1, hit2;
+			float dist1 = pointToTriangleDistance(p, v[face.x], v[face.y], v[face.z], hit1);
+			float dist2 = pointToTriangleDistance(p, v[face.y], v[face.z], v[face.w], hit2);
+			if( dist1 < dist2 && dist1 < closestDist ) {
+				closestDist = dist1;
+				vts.x = face.x, vts.y = face.y, vts.z = face.z;
+			}
+			else if( dist2 < closestDist ) {
+				closestDist = dist2;
+				vts.x = face.y, vts.y = face.z, vts.z = face.w;
+			}
+		}
+	}
+
+	if( closestDist < distThreshold ) {
+		computeBarycentricCoordinates(p, v[vts.x], v[vts.y], v[vts.z], bcoords);
+		return closestDist;
+	}
+	else {
+		// not found
+		return -1.0;
+	}
 }
 
 // ----------------------------------------------------------------------------

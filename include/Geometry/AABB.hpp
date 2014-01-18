@@ -28,6 +28,13 @@ public:
         }
     }
 
+	AABB(const point_t& minPt, const point_t& maxPt) {
+		for(int i=0;i<3;i++) {
+			minCoord[i] = minPt[i];
+			maxCoord[i] = maxPt[i];
+		}
+	}
+
 	AABB(const AABB& other) {
 		for(int i=0;i<3;i++) {
 			minCoord[i] = other.minCoord[i];
@@ -48,10 +55,13 @@ public:
 	bool isInside(const point_t& p);
 
     /// @brief intersection test with a infinite length ray
-    bool intersectTest(const point_t& origin, const point_t& direction);
+    bool intersectTest(const point_t& origin, const point_t& direction) const;
     /// @brief intersection test with a finite length ray
     bool intersectTestInRange(const point_t& orig, const point_t& dest,
-                              const vector_t& dir, const vector_t& invDir);
+                              const vector_t& dir, const vector_t& invDir) const;
+
+	/// @brief intersection test with another AABB
+	bool intersectsAABB(const AABB& other) const;
 
     T range(Axis axis) const
     {
@@ -86,6 +96,22 @@ private:
 };
 
 template<typename T>
+bool PhGUtils::AABB<T>::intersectsAABB(const AABB& other) const
+{
+	if (maxX() < other.minX() || 
+		maxY() < other.minY() || 
+		maxZ() < other.minZ() ||
+		minX() > other.maxX() || 
+		minY() > other.maxY() ||
+		minZ() > other.maxZ() ) 
+	{
+		return false;
+	}
+	return true;
+}
+
+
+template<typename T>
 bool PhGUtils::AABB<T>::isInside(const typename AABB<T>::point_t& p)
 {
 	return p.x < maxCoord[0] && p.x > minCoord[0]
@@ -95,14 +121,14 @@ bool PhGUtils::AABB<T>::isInside(const typename AABB<T>::point_t& p)
 
 
 template <typename T>
-bool AABB<T>::intersectTest(const typename AABB<T>::point_t &origin, const typename AABB<T>::point_t &direction)
+bool AABB<T>::intersectTest(const typename AABB<T>::point_t &origin, const typename AABB<T>::point_t &direction) const
 {
 	throw lazy_exception();
 }
 
 template <typename T>
 bool AABB<T>::intersectTestInRange(const typename AABB<T>::point_t &orig, const typename AABB<T>::point_t &dest,
-								const typename AABB<T>::vector_t &dir, const typename AABB<T>::vector_t &invDir)
+								const typename AABB<T>::vector_t &dir, const typename AABB<T>::vector_t &invDir) const
 {
 	T tmin, tmax, tymin, tymax, tzmin, tzmax;
 

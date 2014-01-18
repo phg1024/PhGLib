@@ -79,6 +79,8 @@ public:
 	virtual void drawFrame() const = 0;
 	virtual void drawFaceIndices() const = 0;
 
+	virtual void updateAABB() { buildAABB(); }
+
 	// helper functions
 	virtual float findClosestPoint_bruteforce(const Point3f& p, Point3i& vts, Point3f& bcoords) = 0;
 	virtual float findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords, float distThreshold) = 0;
