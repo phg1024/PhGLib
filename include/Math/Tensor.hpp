@@ -77,6 +77,10 @@ public:
 	void print() const{
 		cout << (*this);
 	}
+
+	vector<T> toStdVector() const {
+		return vector<T>(data, data+n);
+	}
 private:
 	int n;
 	T* data;
@@ -529,6 +533,7 @@ public:
 				assert(v.length() == d[0]);
 				Tensor2<T> t2(d[1], d[2]);
 
+				#pragma omp parallel for
 				for(int i=0;i<d[1];i++) {
 					for(int j=0;j<d[2];j++) {
 						T val = 0;
@@ -543,6 +548,8 @@ public:
 			{
 				assert(v.length() == d[1]);
 				Tensor2<T> t2(d[0], d[2]);
+
+				#pragma omp parallel for
 				for(int i=0;i<d[0];i++) {
 					for(int j=0;j<d[2];j++) {
 						T val = 0;
@@ -558,6 +565,7 @@ public:
 				assert(v.length() == d[2]);
 				Tensor2<T> t2(d[0], d[1]);
 
+				#pragma omp parallel for
 				for(int i=0;i<d[0];i++) {
 					for(int j=0;j<d[1];j++) {
 						T val = 0;
