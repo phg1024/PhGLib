@@ -3,7 +3,15 @@
 
 // OpenGL related
 #include "GL/glew.h"
+#ifdef WIN32
 #include "GL/freeglut.h"
+#else
+#ifdef __APPLE__
+#include "GLUT/glut.h"
+#else
+#include "GL/glut.h"
+#endif
+#endif
 
 /// STL related
 #include <algorithm>

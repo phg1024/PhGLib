@@ -15,9 +15,18 @@
  *
  * \todo translation function
  */
+
+#define TRACKBALL_USE_DOUBLE 1
+
 class CGLTrackball
 {
 public:
+#if TRACKBALL_USE_DOUBLE
+    typedef double elem_t;
+#else
+    typedef float elem_t;
+#endif
+
     CGLTrackball(){};
     CGLTrackball(const CGLTrackball& ball):
         R(ball.getRotation()),
@@ -35,7 +44,7 @@ public:
     }
     void init();
 
-    void setSceneScale(float s) {m_sceneScale = s;}
+    void setSceneScale(elem_t s) {m_sceneScale = s;}
 
     void reshape(int w, int h);
     void mouse_rotate(int u, int v);
@@ -50,12 +59,12 @@ public:
     void applyInverseTransform();
     void applyInverseRotation();
 
-    float getX() const {return m_x;};
-    float getY()  const {return m_y;};
-    float getWidth()  const {return m_width;};
-    float getHeight()  const {return m_height;};
-    float getR()  const {return m_r;};
-    float getScale()  const {return m_scale;}
+    elem_t getX() const {return m_x;};
+    elem_t getY()  const {return m_y;};
+    elem_t getWidth()  const {return m_width;};
+    elem_t getHeight()  const {return m_height;};
+    elem_t getR()  const {return m_r;};
+    elem_t getScale()  const {return m_scale;}
     QVector3D getNormDir();
     QQuaternion getRotation() const ;
     QVector3D   getTranslation() const ;
@@ -68,10 +77,10 @@ public:
     void setRotation(const QQuaternion &Q);
     void rotate(const QQuaternion &Q);
 
-    float* getMatrix();
-    float* getInverseMatrix();
+    elem_t* getMatrix();
+    elem_t* getInverseMatrix();
 
-    float M[16];
+    elem_t M[16];
 
 protected:
     QQuaternion R; 		//!< Rotation
@@ -83,9 +92,9 @@ protected:
 private:
     int m_x, m_y;
     int m_width, m_height;
-    float m_r; 		    //!< min(m_width, m_height)
-    float m_scale;
-    float m_sceneScale;
+    elem_t m_r; 		    //!< min(m_width, m_height)
+    elem_t m_scale;
+    elem_t m_sceneScale;
 };
 
 #endif

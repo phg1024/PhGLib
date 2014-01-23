@@ -174,12 +174,12 @@ public:
 		Z = 2
 	};
 	typedef T elem_t;
-	Vector3(void):Vector2(),z(0){}
+    Vector3(void):Vector2<T>(),z(0){}
 	~Vector3(void){}
 
-	Vector3(const vector<T>& elem):Vector2(elem), z(elem[2]){}
-	Vector3(T x, T y, T z):Vector2(x, y), z(z){}
-	Vector3(const Vector3& p):Vector2(p.x, p.y), z(p.z){}
+    Vector3(const vector<T>& elem):Vector2<T>(elem), z(elem[2]){}
+    Vector3(T x, T y, T z):Vector2<T>(x, y), z(z){}
+    Vector3(const Vector3& p):Vector2<T>(p.x, p.y), z(p.z){}
 
 	template <typename PT>
 	/* Construct a vector originate from point p and going to point q */
@@ -191,14 +191,14 @@ public:
 	}
 
 	Vector3(const Vector3& v1, const Vector3& v2) {
-		x = v1.y * v2.z - v1.z * v2.y;
-		y = v1.z * v2.x - v1.x * v2.z;
-		z = v1.x * v2.y - v1.y * v2.x;
+        this->x = v1.y * v2.z - v1.z * v2.y;
+        this->y = v1.z * v2.x - v1.x * v2.z;
+        this->z = v1.x * v2.y - v1.y * v2.x;
 	}
 
 	Vector3& operator=(const Vector3& p)
 	{
-		x = p.x; y = p.y; z = p.z;
+        this->x = p.x; this->y = p.y; this->z = p.z;
 		return (*this);
 	}
 	
@@ -214,29 +214,29 @@ public:
 	}
 
 	// comparison operators
-	bool operator==(const Vector2& p) const
+    bool operator==(const Vector3<T>& p) const
 	{
-		return x == p.x && y == p.y;
+        return this->x == p.x && this->y == p.y && this->z == p.z;
 	}
 
 	// unitary operators
 	Vector3 operator+(){ return (*this); }
-	Vector3 operator-(){ return Vector3(-x, -y, -z); }
+    Vector3 operator-(){ return Vector3(-this->x, -this->y, -this->z); }
 
 	// arithmetic operators
-	Vector3 operator+(const Vector3& p){ return Vector3(x+p.x, y+p.y, z+p.z); }
-	Vector3 operator-(const Vector3& p){ return Vector3(x-p.x, y-p.y, z-p.z); }
+    Vector3 operator+(const Vector3& p){ return Vector3(this->x+p.x, this->y+p.y, this->z+p.z); }
+    Vector3 operator-(const Vector3& p){ return Vector3(this->x-p.x, this->y-p.y, this->z-p.z); }
 	template <typename FT>
-	Vector3 operator*(FT factor){ return Vector3(x*factor, y*factor, z*factor); }
+    Vector3 operator*(FT factor){ return Vector3(this->x*factor, this->y*factor, this->z*factor); }
 	template <typename FT>
-	Vector3 operator/(FT factor){ return Vector3(x/factor, y/factor, z/factor); }
+    Vector3 operator/(FT factor){ return Vector3(this->x/factor, this->y/factor, this->z/factor); }
 
-	Vector3& operator+=(const Vector3& p){ x += p.x; y += p.y; z+=p.z; return (*this); }
-	Vector3& operator-=(const Vector3& p){ x -= p.x; y -= p.y; z-=p.z; return (*this); }
+    Vector3& operator+=(const Vector3& p){ this->x += p.x; this->y += p.y; this->z+=p.z; return (*this); }
+    Vector3& operator-=(const Vector3& p){ this->x -= p.x; this->y -= p.y; this->z-=p.z; return (*this); }
 	template <typename FT>
-	Vector3& operator*=(FT factor){ x *= factor; y *= factor; z *= factor; return (*this); }
+    Vector3& operator*=(FT factor){ this->x *= factor; this->y *= factor; this->z *= factor; return (*this); }
 	template <typename FT>
-	Vector3& operator/=(FT factor){ x /= factor; y /= factor; z /= factor; return (*this); }
+    Vector3& operator/=(FT factor){ this->x /= factor; this->y /= factor; this->z /= factor; return (*this); }
 
 	template <typename PT, typename FT>
 	friend Vector3<PT> operator*(FT factor, const Vector3<PT>& p);
@@ -291,31 +291,31 @@ public:
 	void print(const string& title = "") {
 		if( !title.empty() )
 			cout << title << " = " << endl;
-		cout << '(' << x << ", " << y << ", " << z << ')';
+        cout << '(' << this->x << ", " << this->y << ", " << this->z << ')';
 	}
 
 	T& operator[](Coordinate c) {
-		if( c == X ) return x;
-		else if( c == Y ) return y;
-		else return z;
+        if( c == X ) return this->x;
+        else if( c == Y ) return this->y;
+        else return this->z;
 	}
 
 	const T& operator[](Coordinate c) const {
-		if( c == X ) return x;
-		else if( c == Y ) return y;
-		else return z;
+        if( c == X ) return this->x;
+        else if( c == Y ) return this->y;
+        else return this->z;
 	}
 
 	T& operator[](int c) {
-		if( c == X ) return x;
-		else if( c == Y ) return y;
-		else return z;
+        if( c == X ) return this->x;
+        else if( c == Y ) return this->y;
+        else return this->z;
 	}
 
 	const T& operator[](int c) const {
-		if( c == X ) return x;
-		else if( c == Y ) return y;
-		else return z;
+        if( c == X ) return this->x;
+        else if( c == Y ) return this->y;
+        else return this->z;
 	}
 
 	T z;
@@ -368,43 +368,43 @@ public:
 		W = 3
 	};
 	typedef T elem_t;
-	Vector4(void):Vector3(){}
+    Vector4(void):Vector3<T>(){}
 	~Vector4(void){}
 
-	Vector4(const vector<T>& elem):Vector3(elem), w(elem[3]){}
-	Vector4(T x, T y, T z, T w):Vector3(x, y, z), w(w){}
-	Vector4(const Vector4& p):Vector3(p.x, p.y, p.z), w(p.w){}
+    Vector4(const vector<T>& elem):Vector3<T>(elem), w(elem[3]){}
+    Vector4(T x, T y, T z, T w):Vector3<T>(x, y, z), w(w){}
+    Vector4(const Vector4& p):Vector3<T>(p.x, p.y, p.z), w(p.w){}
 
 	Vector4& operator=(const Vector4& p)
 	{
-		x = p.x; y = p.y; z = p.z; w = p.w;
+        this->x = p.x; this->y = p.y; this->z = p.z; this->w = p.w;
 		return (*this);
 	}
 
 	// comparison operator
 	bool operator==(const Vector4& p) const
 	{
-		return x == p.x && y == p.y && z == p.z && w == p.w;
+        return this->x == p.x && this->y == p.y && this->z == p.z && this->w == p.w;
 	}
 
 	// unitary operators
 	Vector4 operator+(){ return (*this); }
-	Vector4 operator-(){ return Vector4(-x, -y, -z, -w); }
+    Vector4 operator-(){ return Vector4(-this->x, -this->y, -this->z, -this->w); }
 
 	// arithmetic operators
-	Vector4 operator+(const Vector4& p){ return Vector4(x+p.x, y+p.y, z+p.z, w+p.w); }
-	Vector4 operator-(const Vector4& p){ return Vector4(x-p.x, y-p.y, z-p.z, w-p.w); }
+    Vector4 operator+(const Vector4& p){ return Vector4(this->x+p.x, this->y+p.y, this->z+p.z, this->w+p.w); }
+    Vector4 operator-(const Vector4& p){ return Vector4(this->x-p.x, this->y-p.y, this->z-p.z, this->w-p.w); }
 	template <typename FT>
-	Vector4 operator*(FT factor){ return Vector3(x*factor, y*factor, z*factor, w*factor); }
+    Vector4 operator*(FT factor){ return Vector4(this->x*factor, this->y*factor, this->z*factor, this->w*factor); }
 	template <typename FT>
-	Vector4 operator/(FT factor){ return Vector3(x/factor, y/factor, z/factor, w/factor); }
+    Vector4 operator/(FT factor){ return Vector4(this->x/factor, this->y/factor, this->z/factor, this->w/factor); }
 
-	Vector4& operator+=(const Vector4& p){ x += p.x; y += p.y; z+=p.z; w+=p.w; return (*this); }
-	Vector4& operator-=(const Vector4& p){ x -= p.x; y -= p.y; z-=p.z; w-=p.w; return (*this); }
+    Vector4& operator+=(const Vector4& p){ this->x += p.x; this->y += p.y; this->z+=p.z; this->w+=p.w; return (*this); }
+    Vector4& operator-=(const Vector4& p){ this->x -= p.x; this->y -= p.y; this->z-=p.z; this->w-=p.w; return (*this); }
 	template <typename FT>
-	Vector4& operator*=(FT factor){ x *= factor; y *= factor; z *= factor; w *= factor; return (*this); }
+    Vector4& operator*=(FT factor){ this->x *= factor; this->y *= factor; this->z *= factor; this->w *= factor; return (*this); }
 	template <typename FT>
-	Vector4& operator/=(FT factor){ x /= factor; y /= factor; z /= factor; w /= factor; return (*this); }
+    Vector4& operator/=(FT factor){ this->x /= factor; this->y /= factor; this->z /= factor; this->w /= factor; return (*this); }
 
 	template <typename PT, typename FT>
 	friend Vector4<PT> operator*(FT factor, const Vector4<PT>& p);
@@ -416,31 +416,31 @@ public:
 	friend istream& operator>>(istream& is, Vector4& p);
 
 	T& operator[](Coordinate c) {
-		if( c == X ) return x;
-		else if( c == Y ) return y;
-		else if( c == Z ) return z;
-		else return w;
+        if( c == X ) return this->x;
+        else if( c == Y ) return this->y;
+        else if( c == Z ) return this->z;
+        else return this->w;
 	}
 
 	const T& operator[](Coordinate c) const {
-		if( c == X ) return x;
-		else if( c == Y ) return y;
-		else if( c == Z ) return z;
-		else return w;
+        if( c == X ) return this->x;
+        else if( c == Y ) return this->y;
+        else if( c == Z ) return this->z;
+        else return this->w;
 	}
 
 	T& operator[](int c) {
-		if( c == X ) return x;
-		else if( c == Y ) return y;
-		else if( c == Z ) return z;
-		else return w;
+        if( c == X ) return this->x;
+        else if( c == Y ) return this->y;
+        else if( c == Z ) return this->z;
+        else return this->w;
 	}
 
 	const T& operator[](int c) const {
-		if( c == X ) return x;
-		else if( c == Y ) return y;
-		else if( c == Z ) return z;
-		else return w;
+        if( c == X ) return this->x;
+        else if( c == Y ) return this->y;
+        else if( c == Z ) return this->z;
+        else return this->w;
 	}
 
 	T w;

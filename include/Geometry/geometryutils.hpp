@@ -371,8 +371,11 @@ int orientation(const Point2<T>& p, const Point2<T>& q, const Point2<T>& r)
 
 template <typename T>
 vector<Point2<T>> convexHull(const vector<Point2<T>>& inPts) {
-
+#ifdef WIN32
 	typedef typename Point2<T> point_t;
+#else
+    typedef Point2<T> point_t;
+#endif
 
 	vector<point_t> pts = inPts;
 	int n = pts.size();

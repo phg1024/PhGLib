@@ -1,5 +1,9 @@
 #include "Mesh.h"
+#ifdef WIN32
 #include "GL/glut.h"
+#else
+#include "GLUT/glut.h"
+#endif
 #include "MeshLoader.h"
 #include "geometryutils.hpp"
 #include "AABB.hpp"

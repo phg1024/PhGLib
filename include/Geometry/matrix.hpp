@@ -202,10 +202,10 @@ public:
 		return m[i][j];
 	}
 
-	template <typename T>
-	friend ostream& operator<<(ostream& os, const Matrix3x3<T>& m);
-	template <typename T>
-	friend istream& operator>>(istream& is, Matrix3x3<T>& m);
+    template <typename MT>
+    friend ostream& operator<<(ostream& os, const Matrix3x3<MT>& m);
+    template <typename MT>
+    friend istream& operator>>(istream& is, Matrix3x3<MT>& m);
 
 	void print(const string& title = "")
 	{
