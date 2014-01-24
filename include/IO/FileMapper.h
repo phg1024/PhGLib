@@ -1,8 +1,17 @@
 #pragma once
 
+#ifdef WIN32
 #include <Windows.h>
-#include <stdio.h>
 #include <tchar.h>
+#else
+#include <sys/file.h>
+#include <sys/fcntl.h>
+#include <sys/stat.h>
+#include <sys/mman.h>
+#include <unistd.h>
+#endif
+
+#include <stdio.h>
 #include <string>
 #include <iostream>
 #include <iterator>
@@ -12,6 +21,7 @@ using std::cerr;
 using std::endl;
 
 namespace PhGUtils {
+
 class FileMapper
 {
 public:
@@ -30,6 +40,7 @@ public:
 private:
 	string filename;
 
+#ifdef WIN32
 	HANDLE hFile;
 	HANDLE hMapFile;
 	BOOL bFlag;
@@ -46,6 +57,16 @@ private:
 	int i;
 	int iData;
 	int iViewDelta;
+#else
+    int outError;
+    struct stat statInfo;
+    int fileDescriptor;
+    char* pData;
+    size_t fileSize;
+
+public:
+    int error() const { return outError; }
+#endif
 };
 
 }

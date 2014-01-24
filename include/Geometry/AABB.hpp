@@ -7,14 +7,20 @@
 #include "../Core/Tree.hpp"
 #include "Mesh.h"
 #include "../OpenGL/glutilities.h"
+#include "../Utils/utility.hpp"
 
 namespace PhGUtils {
 /* Axis-Aligned Bounding Box class */
 template<typename T>
 struct AABB {
 public:
+#ifdef WIN32
 	typedef typename Point3<T> point_t;
 	typedef typename Vector3<T> vector_t;
+#else
+    typedef Point3<T> point_t;
+    typedef Vector3<T> vector_t;
+#endif
     enum Axis {
         X = 0,
         Y = 1,
@@ -214,12 +220,19 @@ template <typename T>
 class AABBTree : public Tree<AABBNode<T>>
 {
 public:
+#ifdef WIN32
 	typedef typename Point3<T> point_t;
 	typedef typename Vector3<T> vector_t;
 	typedef typename AABBNode<T> node_t;
-    AABBTree():Tree<node_t>{}
+#else
+    typedef Point3<T> point_t;
+    typedef Vector3<T> vector_t;
+    typedef AABBNode<T> node_t;
+#endif
 
-	AABBTree(const TriMesh& mesh);
+    AABBTree():Tree<node_t>(){}
+
+    AABBTree(const TriMesh& mesh);
 	AABBTree(const QuadMesh& mesh);
     ~AABBTree();
 
@@ -244,7 +257,7 @@ void AABBTree<T>::paint()
 	glColor4f(1, 0, 0, 0.25);
 	// BFS the tree and draw the boxes
 	queue<node_t*> nodeset;
-	nodeset.push(mRoot);
+    nodeset.push(this->mRoot);
 	while(!nodeset.empty())
 	{
 		node_t* node = nodeset.front();
@@ -274,6 +287,7 @@ bool AABBTree<T>::intersectTestInRange(const Point3<T> &origin,
 									const Point3<T> &destination,
 									float &t, int &faceIdx)
 {
+    /*
 	vector_t dir(origin, destination);
 	vector_t invDir(1.0 / dir.x(), 1.0 / dir.y(), 1.0 / dir.z());
 	if( dir.x() == 0 )
@@ -290,7 +304,7 @@ bool AABBTree<T>::intersectTestInRange(const Point3<T> &origin,
 
 	queue<node_t*> nodeset;
 	//int testCount = 0;
-	nodeset.push(mRoot);
+    nodeset.push(this->mRoot);
 	while(!nodeset.empty())
 	{
 		node_t* node = nodeset.front();
@@ -339,6 +353,7 @@ bool AABBTree<T>::intersectTestInRange(const Point3<T> &origin,
 
 	//cout << "testCount = " << testCount << endl;
 	return flag;
+    */
 }
 
 template <typename T>
@@ -349,7 +364,7 @@ AABBTree<T>::AABBTree(const TriMesh& mesh)
 		faceIndices[i] = i;
 
 	cout << "building AABB tree ..." << endl;
-	mRoot = buildAABBTree_TriangleMesh(faceIndices, mesh);
+    this->mRoot = buildAABBTree_TriangleMesh(faceIndices, mesh);
 	cout << "AABB tree built." << endl;
 }
 
@@ -361,14 +376,14 @@ PhGUtils::AABBTree<T>::AABBTree(const QuadMesh& mesh)
 		faceIndices[i] = i;
 
 	cout << "building AABB tree ..." << endl;
-	mRoot = buildAABBTree_QuadMesh(faceIndices, mesh);
+    this->mRoot = buildAABBTree_QuadMesh(faceIndices, mesh);
 	cout << "AABB tree built." << endl;
 }
 
 template <typename T>
 AABBTree<T>::~AABBTree()
 {
-	releaseTree(mRoot);
+    releaseTree(this->mRoot);
 }
 
 template <typename T>

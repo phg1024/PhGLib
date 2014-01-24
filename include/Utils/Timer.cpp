@@ -3,6 +3,8 @@
 #include "stringutils.h"
 
 namespace PhGUtils {
+
+#ifdef WIN32
 Timer::Timer(void):totalElapse(0){}
 
 Timer::~Timer(void){}
@@ -26,5 +28,29 @@ void Timer::reset()
 {
 	totalElapse = 0;
 }
+#else
+Timer::Timer(void):totalElapse(0){}
 
+Timer::~Timer(void){}
+
+void Timer::tic() {
+    start = high_resolution_clock::now();
+}
+
+void Timer::toc() {
+    end = high_resolution_clock::now();
+    totalElapse += gap();
+}
+
+void Timer::toc(const string& msg) {
+    end = high_resolution_clock::now();
+    message("Time cost for " + msg + " = " + toString(gap()) + " seconds");
+    totalElapse += gap();
+}
+
+void Timer::reset() {
+    totalElapse = 0;
+}
+
+#endif
 }

@@ -13,8 +13,13 @@ template <typename VT, typename FT>
 class MeshBase
 {
 public:
-	typedef typename VT vert_t;
+#ifdef WIN32
+    typedef typename VT vert_t;
 	typedef typename FT face_t;
+#else
+    typedef VT vert_t;
+    typedef FT face_t;
+#endif
 	typedef Vector3f norm_t;
 	typedef Point2f texcoord_t;
 

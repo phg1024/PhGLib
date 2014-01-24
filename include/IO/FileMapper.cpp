@@ -9,6 +9,7 @@ FileMapper::~FileMapper(void)
 {
 }
 
+#ifdef WIN32
 bool FileMapper::unmap() {
 
 	// Close the file mapping object and the open file
@@ -96,5 +97,67 @@ bool FileMapper::map()
 
 	return true;
 }
+#else
+
+// char * inPathName, void ** outDataPtr, size_t * outDataLength
+bool FileMapper::map() {
+    // Return safe values on error.
+    pData = nullptr;
+    fileSize = 0;
+
+    // Open the file.
+    fileDescriptor = open( filename.c_str(), O_RDONLY, 0 );
+    if( fileDescriptor < 0 )
+    {
+       outError = errno;
+       cout << "failed to open file " << filename << endl;
+       return false;
+    }
+    else
+    {
+        // We now know the file exists. Retrieve the file size.
+        if( fstat( fileDescriptor, &statInfo ) != 0 )
+        {
+            cerr << "file does not exists!" << endl;
+            outError = errno;
+            return false;
+        }
+        else
+        {
+            cout << "file size = " << statInfo.st_size << endl;
+            // Map the file into a read-only memory region.
+            void *paddr = mmap(NULL,
+                               statInfo.st_size,
+                               PROT_READ,
+                               MAP_PRIVATE,
+                               fileDescriptor,
+                               0);
+            pData = reinterpret_cast<char*>(paddr);
+            if( paddr == MAP_FAILED )
+            {
+                outError = errno;
+                cerr << "mmap failed." << endl;
+                return false;
+            }
+            else
+            {
+                // On success, return the size of the mapped file.
+                fileSize = statInfo.st_size;
+            }
+        }
+
+        // Now close the file. The kernel doesn’t use our file descriptor.
+        close( fileDescriptor );
+    }
+
+    return true;
+}
+
+bool FileMapper::unmap() {
+    int status = munmap( pData, fileSize );
+    return (status == 0);
+}
+
+#endif
 
 }

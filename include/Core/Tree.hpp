@@ -6,7 +6,7 @@ template <typename NodeType>
 class Tree{
 public:
 	Tree():mRoot(nullptr){}
-	virtual ~Tree(){if( mRoot ) delete mRoot;};
+    virtual ~Tree(){if( mRoot ) delete mRoot;}
 
     const NodeType* root() const
     {

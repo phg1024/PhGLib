@@ -83,7 +83,7 @@ namespace PhGUtils {
 
 	void MeshViewer::enableLighting()
 	{
-		GLfloat light_position[] = {2.0 * scale, 2.0 * scale, 2.0 * scale, 1.0};
+        GLfloat light_position[] = {2.0f * scale, 2.0f * scale, 2.0f * scale, 1.0f};
 		GLfloat mat_specular[] = {0.8, 0.8, 0.8, 1.0};
 		GLfloat mat_diffuse[] = {0.375, 0.375, 0.375, 1.0};
 		GLfloat mat_shininess[] = {25.0};

@@ -128,6 +128,7 @@ void CGLTrackball::motion_translate(int u, int v)
 
     m_Quaternion2Matrix();
 
+    qreal t;
     QMatrix4x4 modelMatrix = QMatrix4x4(M);
     QVector3D movementVector = modelMatrix * screenMovementVector;
 
@@ -161,13 +162,21 @@ void CGLTrackball::wheel(int delta)
 void CGLTrackball::applyRotation()
 {
     m_Quaternion2Matrix();
+#if TRACKBALL_USE_DOUBLE
+    glMultMatrixd(M);
+#else
     glMultMatrixf(M);
+#endif
 }
 
 void CGLTrackball::applyTransform()
 {
     m_Quaternion2Matrix();
+#if TRACKBALL_USE_DOUBLE
+    glMultMatrixd(M);
+#else
     glMultMatrixf(M);
+#endif
 //    glScalef(m_scale, m_scale, m_scale);
     glTranslatef(T.x(), T.y(), T.z());
 }
@@ -179,17 +188,21 @@ void CGLTrackball::applyInverseTransform()
     m_Quaternion2Matrix();
     R = S;
 
+#if TRACKBALL_USE_DOUBLE
+    glMultMatrixd(M);
+#else
     glMultMatrixf(M);
+#endif
     glScalef(1.f/m_scale, 1.f/m_scale, 1.f/m_scale);
 }
 
-float* CGLTrackball::getMatrix()
+CGLTrackball::elem_t* CGLTrackball::getMatrix()
 {
     m_Quaternion2Matrix();
     return M;
 }
 
-float* CGLTrackball::getInverseMatrix()
+CGLTrackball::elem_t* CGLTrackball::getInverseMatrix()
 {
     QQuaternion S = R;
     R.setScalar(-R.scalar());
@@ -205,7 +218,11 @@ void CGLTrackball::applyInverseRotation()
     m_Quaternion2Matrix();
     R = S;
 
+#if TRACKBALL_USE_DOUBLE
+    glMultMatrixd(M);
+#else
     glMultMatrixf(M);
+#endif
 }
 
 void CGLTrackball::m_Quaternion2Matrix()

@@ -1,7 +1,7 @@
 #include "MeshLoader.h"
-#include "utility.hpp"
-#include "stringutils.h"
-#include "fileutils.h"
+#include "../Utils/utility.hpp"
+#include "../Utils/stringutils.h"
+#include "../Utils/fileutils.h"
 #include "../IO/FileMapper.h"
 #include "../Utils/Timer.h"
 
@@ -142,6 +142,7 @@ bool OBJLoader::load(const string& filename) {
 
 		if( !fm.map() ){
 			cerr << "Could not open file " << filename << ". Abort." << endl;
+            cerr << "Error number = " << fm.error() << endl;
 			return false;
 		}
 
@@ -241,7 +242,7 @@ bool OBJLoader::load(const string& filename) {
 		fm.unmap();
 		t.toc();
 		cout << "finish loading file " << filename << endl;
-		cout << "loading time = " << t.gap() << endl;
+        cout << "loading time = " << t.gap() << " seconds." << endl;
 		return true;
 	}
 	catch( exception e )
