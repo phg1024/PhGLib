@@ -4,6 +4,9 @@
 #include "vector.hpp"
 #include "point.hpp"
 
+#include <QMatrix3x3>
+#include <QMatrix4x4>
+
 namespace PhGUtils {
 template <typename T>
 class Matrix3x3
@@ -38,6 +41,18 @@ public:
 	}
 
 	~Matrix3x3(void){}
+
+	Matrix3x3& operator=(const Matrix3x3& mat) {
+		m[0][0] = mat(0, 0); m[0][1] = mat(0, 1); m[0][2] = mat(0, 2);
+		m[1][0] = mat(1, 0); m[1][1] = mat(1, 1); m[1][2] = mat(1, 2);
+		m[2][0] = mat(2, 0); m[2][1] = mat(2, 1); m[2][2] = mat(2, 2);
+
+		return (*this);
+	}
+
+	QMatrix3x3 toQMatrix() const {
+		return QMatrix3x3(this->data());
+	}
 
 	bool operator==(const Matrix3x3& mat)
 	{
@@ -304,6 +319,19 @@ public:
 	}
 
 	~Matrix4x4(void){}
+
+	Matrix4x4& operator=(const Matrix4x4& mat) {
+		m[0][0] = mat(0, 0); m[0][1] = mat(0, 1); m[0][2] = mat(0, 2); m[0][3] = mat(0, 3);
+		m[1][0] = mat(1, 0); m[1][1] = mat(1, 1); m[1][2] = mat(1, 2); m[1][3] = mat(1, 3);
+		m[2][0] = mat(2, 0); m[2][1] = mat(2, 1); m[2][2] = mat(2, 2); m[2][3] = mat(2, 3);
+		m[3][0] = mat(3, 0); m[3][1] = mat(3, 1); m[3][2] = mat(3, 2); m[3][3] = mat(3, 3);
+
+		return (*this);
+	}
+
+	QMatrix4x4 toQMatrix() const {
+		return QMatrix4x4(this->data());
+	}
 
 	static Matrix4x4 zero()
 	{

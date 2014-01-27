@@ -168,6 +168,25 @@ void jacobian_rotationMatrix(T thetaX, T thetaY, T thetaZ,
 	JRotZ = dzRotationMatrix<T>(thetaZ) * rotY * rotX;
 }
 
+template <typename T, typename VT>
+Matrix3x3<T> outerProduct(const VT& u, const VT& v) {
+	return Matrix3x3<T>(
+		u.x * v.x, u.x * v.y, u.x * v.z,
+		u.y * v.x, u.y * v.y, u.y * v.z,
+		u.z * v.x, u.z * v.y, u.z * v.z
+		);
+}
+
+template <typename T, typename VT>
+Matrix4x4<T> outerProduct(const VT& u, const VT& v) {
+	return Matrix3x3<T>(
+		u.x * v.x, u.x * v.y, u.x * v.z, u.x * v.w,
+		u.y * v.x, u.y * v.y, u.y * v.z, u.y * v.w,
+		u.z * v.x, u.z * v.y, u.z * v.z, u.z * v.w,
+		u.w * v.x, u.w * v.y, u.w * v.z, u.w * v.w
+		);
+}
+
 template <typename T>
 __forceinline void encodeIndex(int idx, T& r, T& g, T& b, T scaler = 255.0) {
 	r = ((idx >> 16) & 0xff) / scaler;

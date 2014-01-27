@@ -1,6 +1,6 @@
 #include "Mesh.h"
 #ifdef WIN32
-#include "GL/glut.h"
+#include "GL/freeglut.h"
 #else
 #include "GLUT/glut.h"
 #endif
@@ -141,6 +141,7 @@ void TriMesh::buildAABB()
 
 float TriMesh::findClosestPoint_bruteforce(const Point3f& p, Point3i& vts, Point3f& bcoords)
 {
+#undef max
 	// iterate through all faces and find a closest match
 	float closestDist = numeric_limits<float>::max();
 	std::for_each(f.begin(), f.end(), [&](const face_t& face) {
