@@ -168,8 +168,8 @@ void jacobian_rotationMatrix(T thetaX, T thetaY, T thetaZ,
 	JRotZ = dzRotationMatrix<T>(thetaZ) * rotY * rotX;
 }
 
-template <typename T, typename VT>
-Matrix3x3<T> outerProduct(const VT& u, const VT& v) {
+template <typename T>
+Matrix3x3<T> outerProduct(const Vector3<T>& u, const Vector3<T>& v) {
 	return Matrix3x3<T>(
 		u.x * v.x, u.x * v.y, u.x * v.z,
 		u.y * v.x, u.y * v.y, u.y * v.z,
@@ -177,8 +177,8 @@ Matrix3x3<T> outerProduct(const VT& u, const VT& v) {
 		);
 }
 
-template <typename T, typename VT>
-Matrix4x4<T> outerProduct(const VT& u, const VT& v) {
+template <typename T>
+Matrix4x4<T> outerProduct(const Vector4<T>& u, const Vector4<T>& v) {
 	return Matrix3x3<T>(
 		u.x * v.x, u.x * v.y, u.x * v.z, u.x * v.w,
 		u.y * v.x, u.y * v.y, u.y * v.z, u.y * v.w,
