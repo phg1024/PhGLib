@@ -27,5 +27,11 @@ string toString(const T& t) {
 	return ss.str();
 }
 
+static string toString(const bool& v) {
+    stringstream ss;
+    ss << (v?"true":"false");
+    return ss.str();
+}
+
 string padWith(const string& str, char c, int L);
 }

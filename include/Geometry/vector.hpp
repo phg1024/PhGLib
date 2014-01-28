@@ -132,6 +132,14 @@ public:
         else return y;
     }
 
+    string toString() const {
+        stringstream ss;
+
+        ss << (*this);
+
+        return ss.str();
+    }
+
     T x, y;
 };
 
@@ -324,6 +332,14 @@ public:
         else return this->z;
     }
 
+    string toString() const {
+        stringstream ss;
+
+        ss << (*this);
+
+        return ss.str();
+    }
+
     T z;
 };
 
@@ -450,6 +466,14 @@ public:
         else if( c == Y ) return this->y;
         else if( c == Z ) return this->z;
         else return this->w;
+    }
+
+    string toString() const {
+        stringstream ss;
+
+        ss << (*this);
+
+        return ss.str();
     }
 
     T w;
