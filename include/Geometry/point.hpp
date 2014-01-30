@@ -95,6 +95,12 @@ public:
         cout << (title.empty()?"":title + " = (") << x << ", " << y << ")" << endl;
     }
 
+    string toString() const {
+        stringstream ss;
+        ss << "(" << x << ", " << y << ")";
+        return ss.str();
+    }
+
     elem_t operator[](Coordinate c) const {
         if( c == X ) return x;
         else return y;
@@ -223,6 +229,12 @@ public:
     void print(const string& title)
     {
         cout << (title.empty()?"":title + " = (") << this->x << ", " << this->y << ", " << this->z << ")" << endl;
+    }
+
+    string toString() const {
+        stringstream ss;
+        ss << "(" << this->x << ", " << this->y << ", " << this->z << ")";
+        return ss.str();
     }
 
     // stream operators
