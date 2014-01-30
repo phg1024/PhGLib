@@ -142,7 +142,9 @@ bool OBJLoader::load(const string& filename) {
 
 		if( !fm.map() ){
 			cerr << "Could not open file " << filename << ". Abort." << endl;
+#ifndef WIN32
             cerr << "Error number = " << fm.error() << endl;
+#endif
 			return false;
 		}
 
@@ -199,6 +201,7 @@ bool OBJLoader::load(const string& filename) {
 						vtidx = atoi((*vit).c_str());
 						vit++;
 						if( vtidx < 0 ) vtidx = -vtidx;
+#undef max
 						f.t.push_back(std::max(vtidx - 1, 0));
 
 					}

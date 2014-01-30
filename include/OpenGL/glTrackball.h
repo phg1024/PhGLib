@@ -16,7 +16,11 @@
  * \todo translation function
  */
 
+#ifdef WIN32
+#define TRACKBALL_USE_DOUBLE 0
+#else
 #define TRACKBALL_USE_DOUBLE 1
+#endif
 
 class CGLTrackball
 {

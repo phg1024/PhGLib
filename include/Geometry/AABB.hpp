@@ -26,7 +26,7 @@ public:
         Y = 1,
         Z = 2
     };
-
+#undef max
     AABB() {
         for(int i=0;i<3;i++) {
 			minCoord[i] = numeric_limits<T>::max();
