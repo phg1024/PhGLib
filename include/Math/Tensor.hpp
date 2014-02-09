@@ -292,12 +292,12 @@ public:
 	}
 #endif
 
-	void print(const string& title = "") const{
+	void print(const string& title = "", ostream& os = cout) const{
 		if( !title.empty() ) cout << title << " = " << endl;;
 		for(int i=0;i<d[0];i++) {
 			int offset = i * d[1];
 			for(int j=0;j<d[1];j++) {
-				cout << data[offset + j] << ((j==d[1]-1)?'\n':' ');
+				os << data[offset + j] << ((j==d[1]-1)?'\n':' ');
 			}
 		}
 	}

@@ -179,7 +179,7 @@ Matrix3x3<T> outerProduct(const Vector3<T>& u, const Vector3<T>& v) {
 
 template <typename T>
 Matrix4x4<T> outerProduct(const Vector4<T>& u, const Vector4<T>& v) {
-	return Matrix3x3<T>(
+	return Matrix4x4<T>(
 		u.x * v.x, u.x * v.y, u.x * v.z, u.x * v.w,
 		u.y * v.x, u.y * v.y, u.y * v.z, u.y * v.w,
 		u.z * v.x, u.z * v.y, u.z * v.z, u.z * v.w,

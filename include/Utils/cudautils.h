@@ -35,7 +35,20 @@ __host__ inline void showCUDAMemoryUsage(const char* str = NULL)
 
 template <typename T> 
 __host__ inline void writeback(T* ptr, int size, const string& filename) {
-	vector<float> v(size);
+	vector<T> v(size);
 	checkCudaErrors(cudaMemcpy(&(v[0]), ptr, sizeof(T)*size, cudaMemcpyDeviceToHost));
 	PhGUtils::write2file(v, filename);
+}
+
+template <typename T> 
+__host__ inline void writeback(T* ptr, int rows, int cols, const string& filename) {
+	vector<T> v(rows*cols);
+	checkCudaErrors(cudaMemcpy(&(v[0]), ptr, sizeof(T)*rows*cols, cudaMemcpyDeviceToHost));
+	ofstream fout(filename);
+	if( !fout ) {
+		PhGUtils::error("failed to write file " + filename);
+		return;
+	}
+	PhGUtils::print2DArray(&v[0], rows, cols, fout);
+	fout.close();
 }
