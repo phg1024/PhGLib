@@ -8,6 +8,13 @@
 
 #include "fileutils.h"
 
+__host__ inline void checkCudaState() {
+	cudaThreadSynchronize();
+	cudaError_t err = cudaGetLastError();
+	if (err != cudaSuccess) 
+		printf("Error: %s\n", cudaGetErrorString(err));
+}
+
 __host__ inline void showCUDAMemoryUsage(const char* str = NULL)
 {
 	size_t free_byte ;
@@ -51,4 +58,9 @@ __host__ inline void writeback(T* ptr, int rows, int cols, const string& filenam
 	}
 	PhGUtils::print2DArray(&v[0], rows, cols, fout);
 	fout.close();
+}
+
+__host__ __inline__ ostream& operator<<( ostream& os, const float3& v) {
+	os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+	return os;
 }
