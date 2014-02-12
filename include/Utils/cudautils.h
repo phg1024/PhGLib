@@ -6,14 +6,26 @@
 #include <helper_functions.h>
 #include <helper_cuda.h>
 
+#include "utility.hpp"
 #include "fileutils.h"
 
-__host__ inline void checkCudaState() {
+#define CHECKCUDASTATE_DEBUG
+
+__host__ inline void checkCudaState_impl(const char* file = __FILE__ , int line = __LINE__ ) {
 	cudaThreadSynchronize();
 	cudaError_t err = cudaGetLastError();
-	if (err != cudaSuccess) 
-		printf("Error: %s\n", cudaGetErrorString(err));
+	if (err != cudaSuccess)  {
+		fprintf(stderr, "CUDA error at %s: line# %d\t%s\n",file, line, cudaGetErrorString(err));
+		::system("pause");
+		//exit(-1);
+	}
 }
+
+#ifdef CHECKCUDASTATE_DEBUG
+#define checkCudaState() checkCudaState_impl(__FILE__, __LINE__)
+#else
+#define checkCudaState()
+#endif
 
 __host__ inline void showCUDAMemoryUsage(const char* str = NULL)
 {

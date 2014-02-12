@@ -44,8 +44,13 @@ namespace PhGUtils {
 
 		// compute initial residue
 		func(x, r, m, n, adata);
+		//ofstream fout0("r.txt");
+		//print2DArray(r, n, 1, fout0);
+		//fout0.close();
 
 		int iters = 0;
+
+		//::system("pause");
 
 		//printArray(x, m);
 		//printArray(r, n);
@@ -75,7 +80,11 @@ namespace PhGUtils {
 			// compute deltaX
 			LAPACKE_spotrf( LAPACK_COL_MAJOR, 'U', m, JtJ, m );
 			LAPACKE_spotrs( LAPACK_COL_MAJOR, 'U', m, 1, JtJ, m, deltaX, m );
-			
+
+			//ofstream fout2("deltaX.txt");
+			//printArray(deltaX, m, fout2);
+			//fout2.close();
+
 			// update x
 			cblas_saxpy(m, -delta, deltaX, 1, x, 1);
 
@@ -86,6 +95,8 @@ namespace PhGUtils {
 			//system("pause");
 			iters++;
 		}
+
+		//::system("pause");
 
 		// delete workspace
 		delete[] x0;
