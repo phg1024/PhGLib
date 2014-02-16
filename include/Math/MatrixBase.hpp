@@ -40,7 +40,7 @@ public:
 	virtual bool isSymmetric() const { return mSymmetric; }
 	virtual bool& isSymmetric() { return mSymmetric; }
 	virtual bool isValid() const = 0;
-	virtual void print(const string& title = "") const = 0;
+	virtual void print(const string& title = "", ostream& os = std::cout) const = 0;
 
 	MatrixType getType() const { return mType; }
 	MatrixFormat getFormat() const { return mFormat; }

@@ -6,10 +6,12 @@
 #include <helper_functions.h>
 #include <helper_cuda.h>
 
+#include <cublas.h>
+
 #include "utility.hpp"
 #include "fileutils.h"
 
-#define CHECKCUDASTATE_DEBUG
+//#define CHECKCUDASTATE_DEBUG
 
 __host__ inline void checkCudaState_impl(const char* file = __FILE__ , int line = __LINE__ ) {
 	cudaThreadSynchronize();
@@ -26,6 +28,38 @@ __host__ inline void checkCudaState_impl(const char* file = __FILE__ , int line 
 #else
 #define checkCudaState()
 #endif
+
+static const char *cublasGetErrorString(cublasStatus_t error)
+{
+    switch (error)
+    {
+        case CUBLAS_STATUS_SUCCESS:
+            return "CUBLAS_STATUS_SUCCESS";
+
+        case CUBLAS_STATUS_NOT_INITIALIZED:
+            return "CUBLAS_STATUS_NOT_INITIALIZED";
+
+        case CUBLAS_STATUS_ALLOC_FAILED:
+            return "CUBLAS_STATUS_ALLOC_FAILED";
+
+        case CUBLAS_STATUS_INVALID_VALUE:
+            return "CUBLAS_STATUS_INVALID_VALUE";
+
+        case CUBLAS_STATUS_ARCH_MISMATCH:
+            return "CUBLAS_STATUS_ARCH_MISMATCH";
+
+        case CUBLAS_STATUS_MAPPING_ERROR:
+            return "CUBLAS_STATUS_MAPPING_ERROR";
+
+        case CUBLAS_STATUS_EXECUTION_FAILED:
+            return "CUBLAS_STATUS_EXECUTION_FAILED";
+
+        case CUBLAS_STATUS_INTERNAL_ERROR:
+            return "CUBLAS_STATUS_INTERNAL_ERROR";
+    }
+
+    return "<unknown>";
+}
 
 __host__ inline void showCUDAMemoryUsage(const char* str = NULL)
 {
@@ -55,14 +89,14 @@ __host__ inline void showCUDAMemoryUsage(const char* str = NULL)
 template <typename T> 
 __host__ inline void writeback(T* ptr, int size, const string& filename) {
 	vector<T> v(size);
-	checkCudaErrors(cudaMemcpy(&(v[0]), ptr, sizeof(T)*size, cudaMemcpyDeviceToHost));
+	cudaMemcpy(&(v[0]), ptr, sizeof(T)*size, cudaMemcpyDeviceToHost);
 	PhGUtils::write2file(v, filename);
 }
 
 template <typename T> 
 __host__ inline void writeback(T* ptr, int rows, int cols, const string& filename) {
 	vector<T> v(rows*cols);
-	checkCudaErrors(cudaMemcpy(&(v[0]), ptr, sizeof(T)*rows*cols, cudaMemcpyDeviceToHost));
+	cudaMemcpy(&(v[0]), ptr, sizeof(T)*rows*cols, cudaMemcpyDeviceToHost);
 	ofstream fout(filename);
 	if( !fout ) {
 		PhGUtils::error("failed to write file " + filename);

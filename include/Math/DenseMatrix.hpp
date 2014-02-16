@@ -53,7 +53,7 @@ public:
 	DenseMatrix operator/(double factor);
 	DenseMatrix operator/=(double factor);
 
-	/// element accessor
+	/// element accessors
 	virtual const T& operator()(idx_t i, idx_t j) const;
 	virtual T& operator()(idx_t i, idx_t j);
 
@@ -65,7 +65,7 @@ public:
 
 	/// misc operations
 	virtual bool isValid() const;
-	virtual void print(const string& title = "") const;
+	virtual void print(const string& title = "", ostream& os = std::cout) const;
 	void print(const string& title, bool trans) const;
 
 	elem_t* ptr() {return mElems;}
@@ -402,10 +402,10 @@ bool DenseMatrix<T>::isValid() const
 }
 
 template <typename T>
-void DenseMatrix<T>::print(const string& title) const
+void DenseMatrix<T>::print(const string& title, ostream& os) const
 {
 	if( title != "" )
-		std::cout << title << " = " << std::endl;
+		os << title << " = " << std::endl;
 
 	if( !isValid() )
 	{
@@ -416,9 +416,9 @@ void DenseMatrix<T>::print(const string& title) const
 	for(size_t i=0;i<mRows;i++)
 	{
 		for(size_t j=0;j<mCols;j++)
-			std::cout << (*this)(i, j) << "\t";
+			os << (*this)(i, j) << "\t";
 
-		std::cout << std::endl;
+		os << std::endl;
 	}
 }
 

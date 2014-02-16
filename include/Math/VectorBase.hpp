@@ -34,7 +34,7 @@ public:
     virtual size_t length() const = 0;
 
     virtual bool isValid() const = 0;
-    virtual void print(const string& title = "") const = 0;
+    virtual void print(const string& title = "", ostream& os = std::cout) const = 0;
 
     VectorType getType() const { return mType; }
     int getElementSize() const { return mElemSize; }

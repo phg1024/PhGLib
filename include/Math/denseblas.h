@@ -81,32 +81,11 @@ lapack_int leastsquare(PhGUtils::DenseMatrix<T>& A, PhGUtils::DenseVector<T>& b)
 		s.ptr(), -1.0, &rank);
 }
 
-// least square solver using normal equation
-lapack_int leastsquare_normalmat(PhGUtils::DenseMatrix<float>& A, PhGUtils::DenseVector<float>& b, 
-								 PhGUtils::DenseMatrix<float>& AtA, PhGUtils::DenseVector<float>& Atb) {
-	lapack_int m = A.rows(), n = A.cols();
-	// compute AtA
-	cblas_ssyrk (CblasRowMajor, CblasUpper, CblasNoTrans, n, m, 1.0, A.ptr(), m, 0, AtA.ptr(), n);
-
-	// compute Atb
-	cblas_sgemv (CblasRowMajor, CblasNoTrans, n, m, 1.0, A.ptr(), m, b.ptr(), 1, 0, Atb.ptr(), 1);
-
-	// compute AtA\Atb, since AtA is only semi-positive definite, we need to use LU-decomposition
-#if 0
-	PhGUtils::DenseVector<int> ipiv(n);
-	LAPACKE_ssytrf( LAPACK_COL_MAJOR, 'L', n, AtA.ptr(), n, ipiv.ptr() );
-	return LAPACKE_ssytrs(LAPACK_COL_MAJOR, 'L', n, 1, AtA.ptr(), n, ipiv.ptr(), Atb.ptr(), n);
-#else
-	LAPACKE_spotrf( LAPACK_COL_MAJOR, 'L', n, AtA.ptr(), n );
-	return LAPACKE_spotrs( LAPACK_COL_MAJOR, 'L', n, 1, AtA.ptr(), n, Atb.ptr(), n );
-#endif
-}
-
 template <typename T>
 PhGUtils::DenseVector<T> solve(const PhGUtils::DenseMatrix<T>& A, const PhGUtils::DenseVector<T>& b) {
 	arma::mat Amat = toMat(A);
 	arma::vec bvec = toVec(b);
-	
+
 	arma::vec x = arma::solve(Amat, bvec);
 
 	PhGUtils::DenseVector<T> res(x.size());
@@ -116,4 +95,83 @@ PhGUtils::DenseVector<T> solve(const PhGUtils::DenseMatrix<T>& A, const PhGUtils
 
 	//res.print("res");
 	return res;
+}
+
+// least square solver using normal equation
+template <typename T>
+lapack_int leastsquare_normalmat(PhGUtils::DenseMatrix<T>& A, PhGUtils::DenseVector<T>& b, 
+								 PhGUtils::DenseMatrix<T>& AtA, PhGUtils::DenseVector<T>& Atb) 
+{}
+
+template <>
+lapack_int leastsquare_normalmat<double>(PhGUtils::DenseMatrix<double>& A, PhGUtils::DenseVector<double>& b, 
+										PhGUtils::DenseMatrix<double>& AtA, PhGUtils::DenseVector<double>& Atb) 
+{
+	lapack_int m = A.rows(), n = A.cols();
+	// compute AtA
+	cblas_dsyrk (CblasRowMajor, CblasUpper, CblasNoTrans, n, m, 1.0, A.ptr(), m, 0, AtA.ptr(), n);
+
+	//ofstream fout0("A.txt");
+	//A.print("", fout0);
+	//fout0.close();
+
+	//ofstream fout("AtA.txt");
+	//AtA.print("", fout);
+	//fout.close();
+
+	// compute Atb
+	cblas_dgemv (CblasRowMajor, CblasNoTrans, n, m, 1.0, A.ptr(), m, b.ptr(), 1, 0, Atb.ptr(), 1);
+	//ofstream fout2("b.txt");
+	//b.print("", fout2);
+	//fout2.close();
+
+	//ofstream fout1("Atb.txt");
+	//Atb.print("", fout1);
+	//fout1.close();
+
+	// compute AtA\Atb, since AtA is only semi-positive definite, we need to use LU-decomposition
+#if 0
+	PhGUtils::DenseVector<int> ipiv(n);
+	LAPACKE_dsytrf( LAPACK_COL_MAJOR, 'L', n, AtA.ptr(), n, ipiv.ptr() );
+	return LAPACKE_dsytrs(LAPACK_COL_MAJOR, 'L', n, 1, AtA.ptr(), n, ipiv.ptr(), Atb.ptr(), n);
+#else
+	LAPACKE_dpotrf( LAPACK_COL_MAJOR, 'L', n, AtA.ptr(), n );
+	return LAPACKE_dpotrs( LAPACK_COL_MAJOR, 'L', n, 1, AtA.ptr(), n, Atb.ptr(), n );
+#endif
+}
+
+template <>
+lapack_int leastsquare_normalmat<float>(PhGUtils::DenseMatrix<float>& A, PhGUtils::DenseVector<float>& b, 
+								 PhGUtils::DenseMatrix<float>& AtA, PhGUtils::DenseVector<float>& Atb) {
+	lapack_int m = A.rows(), n = A.cols();
+	// compute AtA
+	cblas_ssyrk (CblasRowMajor, CblasUpper, CblasNoTrans, n, m, 1.0, A.ptr(), m, 0, AtA.ptr(), n);
+
+	//ofstream fout0("A.txt");
+	//A.print("", fout0);
+	//fout0.close();
+
+	//ofstream fout("AtA.txt");
+	//AtA.print("", fout);
+	//fout.close();
+
+	// compute Atb
+	cblas_sgemv (CblasRowMajor, CblasNoTrans, n, m, 1.0, A.ptr(), m, b.ptr(), 1, 0, Atb.ptr(), 1);
+	//ofstream fout2("b.txt");
+	//b.print("", fout2);
+	//fout2.close();
+
+	//ofstream fout1("Atb.txt");
+	//Atb.print("", fout1);
+	//fout1.close();
+
+	// compute AtA\Atb, since AtA is only semi-positive definite, we need to use LU-decomposition
+#if 1
+	PhGUtils::DenseVector<int> ipiv(n);
+	LAPACKE_ssytrf( LAPACK_COL_MAJOR, 'L', n, AtA.ptr(), n, ipiv.ptr() );
+	return LAPACKE_ssytrs(LAPACK_COL_MAJOR, 'L', n, 1, AtA.ptr(), n, ipiv.ptr(), Atb.ptr(), n);
+#else
+	LAPACKE_spotrf( LAPACK_COL_MAJOR, 'L', n, AtA.ptr(), n );
+	return LAPACKE_spotrs( LAPACK_COL_MAJOR, 'L', n, 1, AtA.ptr(), n, Atb.ptr(), n );
+#endif
 }

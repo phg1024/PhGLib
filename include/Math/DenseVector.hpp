@@ -41,7 +41,7 @@ public:
     virtual size_t length() const;
 
     virtual bool isValid() const;
-    virtual void print(const string& title = "") const;
+    virtual void print(const string& title = "", ostream& os = std::cout) const;
 
     virtual void save(const string& filename, size_t lineSize = 16) const;
 
@@ -238,15 +238,15 @@ bool DenseVector<T>::isValid() const
 }
 
 template <typename T>
-void DenseVector<T>::print(const string& title) const
+void DenseVector<T>::print(const string& title, ostream& os) const
 {
     if( title != "" )
-        cout << title << " = " << endl;
+        os << title << " = " << endl;
 
     for(size_t i=0;i<mLength;i++)
-        cout << setprecision(4) << mElems[i] << '\t';
+        os << setprecision(12) << mElems[i] << '\t';
 
-    cout << endl;
+    os << endl;
 }
 
 template <typename T>
