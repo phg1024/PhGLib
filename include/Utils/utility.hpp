@@ -47,6 +47,20 @@ namespace PhGUtils {
 		return qimg;
 	}
 
+	template <typename T>
+	T sum(const vector<T>& v) {
+		T res = 0;
+		for_each(v.begin(), v.end(), [&](T x) {
+			res += x;
+		});
+		return res;
+	}
+
+	template <typename T>
+	double average(const vector<T>& v) {
+		return sum(v)/(double)v.size();
+	}
+
 	// misc
 	template <typename T> 
 	void printVector(T A, ostream& os = cout) {
