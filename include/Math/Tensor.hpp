@@ -306,6 +306,48 @@ public:
 	template <typename TT>
 	friend ostream& operator<<(ostream& os, const Tensor2<TT>& t);
 
+	bool read(const string& filename) {
+		try {
+			cout << "reading tensor to file " << filename << endl;
+			fstream fin;
+			fin.open(filename, ios::in | ios::binary);
+
+			fin.read(reinterpret_cast<char*>(&(d[0])), sizeof(int)*2);	
+			cout << "tensor size = " << d[0] << "x" << d[1] << endl;
+			if( data != nullptr ) delete[] data;
+			data = new T[d[0]*d[1]];
+			fin.read(reinterpret_cast<char*>(data), sizeof(T)*d[0]*d[1]);
+
+			fin.close();
+
+			cout << "done." << endl;
+			return true;
+		}
+		catch(...) {
+			cerr << "Failed to write tensor to file " << filename << endl;
+			return false;
+		}
+	}
+
+	bool write(const string& filename) {
+		try {
+			cout << "writing tensor to file " << filename << endl;
+			fstream fout;
+			fout.open(filename, ios::out | ios::binary);
+
+			fout.write(reinterpret_cast<const char*>(&(d[0])), sizeof(int)*2);			
+			fout.write(reinterpret_cast<const char*>(data), sizeof(T)*d[0]*d[1]);
+
+			fout.close();
+
+			cout << "done." << endl;
+			return true;
+		}
+		catch(...) {
+			cerr << "Failed to write tensor to file " << filename << endl;
+			return false;
+		}
+	}
 private:
 	int d[2];
 	
