@@ -85,6 +85,11 @@ __host__ inline void showCUDAMemoryUsage(const char* str = NULL)
 	}
 }
 
+template <typename T>
+__host__ inline void cudaAllocate(T** ptr, size_t count) {
+	cudaMalloc(ptr, sizeof(T)*count);
+	checkCudaState();
+}
 
 template <typename T> 
 __host__ inline void writeback(T* ptr, int size, const string& filename) {
@@ -108,5 +113,10 @@ __host__ inline void writeback(T* ptr, int rows, int cols, const string& filenam
 
 __host__ __inline__ ostream& operator<<( ostream& os, const float3& v) {
 	os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+	return os;
+}
+
+__host__ __inline__ ostream& operator<<( ostream& os, const float4& v) {
+	os << v.x << " " << v.y << " " << v.z << " " << v.w << " ";
 	return os;
 }
