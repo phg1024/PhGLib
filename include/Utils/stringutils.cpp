@@ -79,4 +79,12 @@ string padWith(const string& str, char c, int L) {
 	return res;
 }
 
+void printStringList( const stringlist& lst )
+{
+	for(auto it=lst.begin();it!=lst.end();it++) {
+		cout << (*it) << ' ';
+	}
+	cout << endl;
+}
+
 }

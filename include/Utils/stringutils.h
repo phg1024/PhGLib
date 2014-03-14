@@ -34,4 +34,5 @@ static string toString(const bool& v) {
 }
 
 string padWith(const string& str, char c, int L);
+void printStringList(const stringlist& lst);
 }

@@ -11,7 +11,9 @@
 #include "utility.hpp"
 #include "fileutils.h"
 
-//#define CHECKCUDASTATE_DEBUG
+#ifdef _DEBUG 
+#define CHECKCUDASTATE_DEBUG
+#endif
 
 __host__ inline void checkCudaState_impl(const char* file = __FILE__ , int line = __LINE__ ) {
 	cudaThreadSynchronize();

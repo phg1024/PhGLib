@@ -5,6 +5,119 @@
 #include <QImage>
 
 namespace PhGUtils {
+
+	struct param_t {
+		template <typename T>
+		T getValue() {
+			T* vaddr = reinterpret_cast<T*>(&val);
+			return (*vaddr);
+		};
+
+		float getValue() const {
+			switch( type ) {
+			case BOOL:
+				return val.b_val;
+			case UNSIGNED:
+				return val.uc_val;
+			case INT:
+				return val.i_val;
+			case LONG:
+				return val.l_val;
+			case FLOAT:
+				return val.f_val;
+			case DOUBLE:
+				return val.d_val;
+			}
+		}
+
+		enum ParamType {
+			BOOL = 0,
+			UNSIGNED,
+			CHAR,
+			INT,
+			LONG,
+			FLOAT,
+			DOUBLE,
+			UNKNOWN
+		};
+
+		static ParamType string2type(const string& str) {
+			string s = str;
+			std::transform(s.begin(), s.end(), s.begin(), std::ptr_fun(::tolower));
+
+			if( s == "bool" ) {
+				return BOOL;
+			}
+			else if( s == "unsigned char" ) {
+				return UNSIGNED;
+			}
+			else if( s == "char" ) {
+				return CHAR;
+			}
+			else if( s == "int" ) {
+				return INT;
+			}
+			else if( s == "long" ) {
+				return LONG;
+			}
+			else if( s == "float" ) {
+				return FLOAT;
+			}
+			else if( s == "double" ) {
+				return DOUBLE;
+			}
+			else {
+				return UNKNOWN;
+			}
+		}
+
+		void parseValue(ParamType t, const string& str) {
+			stringstream ss;
+			ss << str;
+			type = t;
+			switch( t ) {
+			case BOOL:
+				ss >> val.b_val;
+				break;
+			case UNSIGNED:
+				ss >> val.uc_val;
+				break;
+			case INT:
+				ss >> val.i_val;
+				break;
+			case LONG:
+				ss >> val.l_val;
+				break;
+			case FLOAT:
+				ss >> val.f_val;
+				break;
+			case DOUBLE:
+				ss >> val.d_val;
+				break;
+			}
+		}
+
+		void setValue(long v) {	val.l_val = v; }
+		void setValue(double v) { val.d_val = v; }
+		void setValue(float v) { val.f_val = v; }
+		void setValue(int v) { val.i_val = v; }
+		void setValue(bool v) { val.b_val = v; }
+		void setValue(unsigned char v) { val.uc_val = v; }
+		void setValue(char v) { val.c_val = v; }
+
+		union{
+			bool	b_val;
+			unsigned char uc_val;
+			char	c_val;
+			int		i_val;
+			long	l_val;
+			float	f_val;
+			double	d_val;
+		} val;
+
+		ParamType type;
+	};
+
 	static vector<unsigned char> fromQImage(const string& filename) {
 		vector<unsigned char> pixmap;
 		QImage img(filename.c_str());
