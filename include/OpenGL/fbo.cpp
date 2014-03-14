@@ -4,6 +4,7 @@ namespace PhGUtils {
 
 void FBO::init()
 {
+	glewInit();
 	// color texture
 	glGenTextures(1, &color_buffer);
 	glBindTexture(GL_TEXTURE_2D, color_buffer);
