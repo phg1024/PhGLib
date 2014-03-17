@@ -74,7 +74,8 @@ public:
 	T* rawptr() { return data; }
 	const T* rawptr() const { return data; }
 
-	void print() const{
+	void print(const string& title = "") const{
+		if( !title.empty() ) cout << title << " = " << endl;
 		cout << (*this);
 	}
 

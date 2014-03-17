@@ -228,7 +228,9 @@ namespace PhGUtils {
 	template <typename T>
 	void debug(const string& name, T value)
 	{
+#ifdef _DEBUG
 		cout << name << " = " << value << endl;
+#endif
 	}
 
 #if 0
@@ -236,29 +238,41 @@ namespace PhGUtils {
 	template <typename T, typename ...Args>
 	void debug(const string& name, T value, Args ...args)
 	{
+#ifdef _DEBUG
 		cout << name << " = " << value << "\t";
 		debug(args...);
+#endif
 	}
 #else
 	// without variadic template support
 	template <typename T1, typename T2>
 	void debug(const string& name1, T1 value1, const string& name2, T2 value2)
 	{
+#ifdef _DEBUG
 		cout << name1 << " = " << value1 << "\t" 
 			 << name2 << " = " << value2 << endl;
+#endif
 	}
 
-	template <typename T1, typename T2>
-	void debug(const string& name1, T1 value1, const string& name2, T2 value2, const string& name3, T2 value3)
+	template <typename T1, typename T2, typename T3>
+	void debug(const string& name1, T1 value1, const string& name2, T2 value2, const string& name3, T3 value3)
 	{
+#ifdef _DEBUG
 		cout << name1 << " = " << value1 << "\t" 
 			 << name2 << " = " << value2 << "\t"
 			 << name3 << " = " << value3
 			 << endl;
+#endif
 	}
 #endif
 
 	// general console message
+	inline void debugmessage(const string& msg) {
+#ifdef _DEBUG
+		cout << msg << endl;
+#endif
+	}
+
 	inline void message(const string& msg) {
 		cout << msg << endl;
 	}

@@ -10,6 +10,8 @@ namespace PhGUtils {
 		T *opts,	/* delta,  r_threshold, diff_threshold */
 		void *adata)
 	{
+		PhGUtils::debug("m", m, "n", n);
+
 		float delta, R_THRES, DIFF_THRES;
 		if( opts == NULL ) {
 			// use default values
@@ -26,24 +28,29 @@ namespace PhGUtils {
 			// allocate space for residue
 			allocateR = true;
 			r = new T[n];
+			memset(r, 0, sizeof(T)*n);
 		}
 
 		T* x0 = new T[m];
 		memset(x0, 0, sizeof(T)*m);
 
 		T* deltaX = new T[m];	// also for Jtr
+		memset(deltaX, 0, sizeof(T)*m);
 		cblas_scopy(m, x, 1, deltaX, 1);
 
 		T* JtJ = new T[m * m];
+		memset(JtJ, 0, sizeof(T)*m*m);
 
 		// Jacobian
 		if( J == NULL ) {
 			allocateJ = true;
 			J = new T[m * n];
+			memset(J, 0, sizeof(T)*m*n);
 		}
 
 		// compute initial residue
 		func(x, r, m, n, adata);
+
 		//ofstream fout0("r.txt");
 		//print2DArray(r, n, 1, fout0);
 		//fout0.close();
@@ -66,6 +73,8 @@ namespace PhGUtils {
 			//ofstream fout1("J.txt");
 			//print2DArray(J, n, m, fout1);
 			//fout1.close();
+
+			//::system("pause");
 
 			// compute JtJ
 			cblas_ssyrk (CblasColMajor, CblasUpper, CblasNoTrans, m, n, 1.0, J, m, 0, JtJ, m);
