@@ -33,6 +33,15 @@ static string toString(const bool& v) {
     return ss.str();
 }
 
+template <typename T>
+T fromString(const string& str) {
+  stringstream ss;
+  ss << str;
+  T val;
+  ss >> val;
+  return val;
+}
+
 string padWith(const string& str, char c, int L);
 void printStringList(const stringlist& lst);
 }

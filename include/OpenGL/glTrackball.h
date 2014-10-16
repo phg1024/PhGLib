@@ -19,7 +19,7 @@
 #ifdef WIN32
 #define TRACKBALL_USE_DOUBLE 0
 #else
-#define TRACKBALL_USE_DOUBLE 1
+#define TRACKBALL_USE_DOUBLE 0
 #endif
 
 class CGLTrackball

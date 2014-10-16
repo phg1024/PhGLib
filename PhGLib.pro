@@ -8,9 +8,12 @@ QT       += widgets opengl xml
 
 TARGET = PhGLib
 TEMPLATE = lib
-CONFIG += staticlib
+CONFIG += staticlib c++11
 
-QMAKE_CXXFLAGS += -std=c++0x -stdlib=libc++ -mmacosx-version-min=10.8
+#QMAKE_CXXFLAGS += -std=c++0x
+
+INCLUDEPATH += /usr/local/include
+LIBS += -L/usr/local/lib -lGLEW
 
 SOURCES += \
     include/Geometry/MeshWriter.cpp \
@@ -64,11 +67,3 @@ HEADERS += \
     include/Utils/stringutils.h \
     include/Utils/singleton.hpp \
     include/Utils/fileutils.h
-unix:!symbian {
-    maemo5 {
-        target.path = /opt/usr/lib
-    } else {
-        target.path = /usr/lib
-    }
-    INSTALLS += target
-}

@@ -160,6 +160,11 @@ namespace PhGUtils {
 		return qimg;
 	}
 
+  template <typename T, typename Container>
+  bool contains(const Container &c, const T &item) {
+    return c.find(item) != c.end();
+  }
+
 	template <typename T>
 	T sum(const vector<T>& v) {
 		T res = 0;
@@ -169,8 +174,13 @@ namespace PhGUtils {
 		return res;
 	}
 
+  template <typename T>
+  T mean(const vector<T>& v) {
+    return sum(v)/(double)v.size();
+  }
+
 	template <typename T>
-	double average(const vector<T>& v) {
+  T average(const vector<T>& v) {
 		return sum(v)/(double)v.size();
 	}
 

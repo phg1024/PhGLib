@@ -200,6 +200,24 @@ public:
 		return Point3<PT>(x, y, z);
 	}
 
+  template <typename VT>
+  Vector2<VT> operator*(const Vector2<VT>& v) const
+  {
+    T x, y;
+    x = m[0][0] * v.x + m[0][1] * v.y + m[0][2];
+    y = m[1][0] * v.x + m[1][1] * v.y + m[1][2];
+    return Vector2<VT>(x, y);
+  }
+
+  template <typename PT>
+  Point2<PT> operator*(const Point2<PT>& p) const
+  {
+    T x, y;
+    x = m[0][0] * p.x + m[0][1] * p.y + m[0][2];
+    y = m[1][0] * p.x + m[1][1] * p.y + m[1][2];
+    return Point2<PT>(x, y);
+  }
+
 	template <typename MT, typename VT>
 	friend Vector3<VT> operator*(const Vector3<VT>& v, const Matrix3x3<MT>& mat);
 
