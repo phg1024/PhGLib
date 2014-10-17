@@ -8,6 +8,136 @@
 #include <QMatrix4x4>
 
 namespace PhGUtils {
+
+template <typename T>
+class Matrix2x2 {
+public:
+	typedef T elem_t;
+	Matrix2x2(void){
+		for (int i = 0; i<2; i++)
+		for (int j = 0; j<2; j++)
+			m[i][j] = 0;
+	}
+
+	Matrix2x2(const Matrix2x2 &mat) {
+		m[0][0] = mat(0, 0); m[0][1] = mat(0, 1);
+		m[1][0] = mat(1, 0); m[1][1] = mat(1, 1);
+	}
+
+	Matrix2x2(T m00, T m01, T m10, T m11) {
+		m[0][0] = m00; m[0][1] = m01;
+		m[1][0] = m10; m[1][1] = m11;
+	}
+
+	~Matrix2x2(){}
+
+	Matrix2x2& operator=(const Matrix2x2 &mat) {
+		m[0][0] = mat(0, 0); m[0][1] = mat(0, 1);
+		m[1][0] = mat(1, 0); m[1][1] = mat(1, 1);
+
+		return (*this);
+	}
+
+	T det() const {
+		return m[0][0] * m[1][1] - m[1][0] * m[0][1];
+	}
+
+	// accessor
+	T& operator()(int i, int j)
+	{
+		return m[i][j];
+	}
+	const T& operator()(int i, int j) const
+	{
+		return m[i][j];
+	}
+
+	Matrix2x2 inv() const
+	{
+		Matrix2x2 mat;
+		T dinv = 1.0 / det();
+
+		mat(0, 0) = m[1][1] * dinv;
+		mat(0, 1) = -m[0][1] * dinv;
+		mat(1, 0) = -m[1][0] * dinv;
+		mat(1, 1) = m[0][0] * dinv;
+
+		return mat;
+	}
+
+	Matrix2x2 operator*(const Matrix2x2 &mat) {
+		Matrix2x2 res;
+		res(0, 0) = m[0][0] * mat(0, 0) + m[0][1] * mat(1, 0);
+		res(0, 1) = m[0][0] * mat(0, 1) + m[0][1] * mat(1, 1);
+		res(1, 0) = m[1][0] * mat(0, 0) + m[1][1] * mat(1, 0);
+		res(1, 1) = m[1][0] * mat(0, 1) + m[1][1] * mat(1, 1);
+		return res;
+	}
+	Matrix2x2 operator*(const T& factor) const
+	{
+		Matrix2x2 res((*this));
+
+		res(0, 0) *= factor; res(0, 1) *= factor;
+		res(1, 0) *= factor; res(1, 1) *= factor;
+
+		return res;
+	}
+
+	Matrix2x2 operator/(const T& factor) const
+	{
+		Matrix2x2 res((*this));
+
+		res(0, 0) /= factor; res(0, 1) /= factor;
+		res(1, 0) /= factor; res(1, 1) /= factor;
+
+		return res;
+	}
+
+	// matrix vector / point operations
+	template <typename VT>
+	Vector2<VT> operator*(const Vector2<VT>& v) const
+	{
+		T x, y;
+		x = m[0][0] * v.x + m[0][1] * v.y;
+		y = m[1][0] * v.x + m[1][1] * v.y;
+		return Vector2<VT>(x, y);
+	}
+
+	template <typename PT>
+	Point2<PT> operator*(const Point2<PT>& p) const
+	{
+		T x, y;
+		x = m[0][0] * p.x + m[0][1] * p.y;
+		y = m[1][0] * p.x + m[1][1] * p.y;
+		return Point2<PT>(x, y);
+	}
+
+	template <typename MT>
+	friend ostream& operator<<(ostream& os, const Matrix2x2<MT>& m);
+	template <typename MT>
+	friend istream& operator>>(istream& is, Matrix2x2<MT>& m);
+
+private:
+	T m[2][2];
+};
+
+template <typename T>
+ostream& operator<<(ostream& os, const Matrix2x2<T>& m)
+{
+	os << m(0, 0) << ' ' << m(0, 1);
+	os << ' ' << m(1, 0) << ' ' << m(1, 1);
+	return os;
+}
+
+template <typename T>
+istream& operator>>(istream& is, Matrix2x2<T>& m)
+{
+	for (int i = 0; i<2; i++)
+	for (int j = 0; j<2; j++)
+		is >> m(i, j);
+	return is;
+}
+
 template <typename T>
 class Matrix3x3
 {
