@@ -20,7 +20,13 @@ void Timer::toc() {
 
 void Timer::toc(const string& msg) {
 	QueryPerformanceCounter((LARGE_INTEGER *) &end);
-	message("Time cost for " + msg + " = " + toString(gap()) + " seconds");
+	message(msg + " time: " + toString(gap()) + " seconds.");
+	totalElapse += gap();
+}
+
+void Timer::tocMS(const string& msg) {
+	QueryPerformanceCounter((LARGE_INTEGER *) &end);
+	message(msg + " time = " + toString(gap()*1000.0) + " ms.");
 	totalElapse += gap();
 }
 

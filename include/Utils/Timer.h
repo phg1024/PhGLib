@@ -22,6 +22,7 @@ public:
 	void tic();
 	void toc();
 	void toc(const string& msg);
+    void tocMS(const string& msg);
 
 	float elapsed() const {
 		return totalElapse;

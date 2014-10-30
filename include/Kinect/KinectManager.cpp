@@ -33,7 +33,7 @@ namespace PhGUtils {
 		sensor->NuiImageStreamOpen(
 			NUI_IMAGE_TYPE_DEPTH,            // Depth camera or rgb camera?
 			NUI_IMAGE_RESOLUTION_640x480,    // Image resolution
-			0,      // Image stream flags, e.g. near mode
+			0,//NUI_IMAGE_FRAME_FLAG_NEAR_MODE_ENABLED,      // Image stream flags, e.g. near mode
 			2,      // Number of frames to buffer
 			NULL,   // Event handle
 			&depthStream);

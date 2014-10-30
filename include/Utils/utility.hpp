@@ -234,6 +234,7 @@ namespace PhGUtils {
 	// debugging related
 	// dummy
 	static void debug(){}
+  static void info() {}
 
 	template <typename T>
 	void debug(const string& name, T value)
@@ -243,6 +244,11 @@ namespace PhGUtils {
 #endif
 	}
 
+  template <typename T>
+  void info(const string& name, T value)
+  {
+    cout << name << " = " << value << endl;
+  }
 #if 0
 	// with variadic template support
 	template <typename T, typename ...Args>
@@ -253,6 +259,14 @@ namespace PhGUtils {
 		debug(args...);
 #endif
 	}
+
+  // with variadic template support
+  template <typename T, typename ...Args>
+  void info(const string& name, T value, Args ...args)
+  {
+    cout << name << " = " << value << "\t";
+    info(args...);
+  }
 #else
 	// without variadic template support
 	template <typename T1, typename T2>
@@ -264,6 +278,14 @@ namespace PhGUtils {
 #endif
 	}
 
+  // without variadic template support
+  template <typename T1, typename T2>
+  void info(const string& name1, T1 value1, const string& name2, T2 value2)
+  {
+    cout << name1 << " = " << value1 << "\t" 
+      << name2 << " = " << value2 << endl;
+  }
+
 	template <typename T1, typename T2, typename T3>
 	void debug(const string& name1, T1 value1, const string& name2, T2 value2, const string& name3, T3 value3)
 	{
@@ -274,6 +296,15 @@ namespace PhGUtils {
 			 << endl;
 #endif
 	}
+
+  template <typename T1, typename T2, typename T3>
+  void info(const string& name1, T1 value1, const string& name2, T2 value2, const string& name3, T3 value3)
+  {
+    cout << name1 << " = " << value1 << "\t"
+      << name2 << " = " << value2 << "\t"
+      << name3 << " = " << value3
+      << endl;
+  }
 #endif
 
 	// general console message
