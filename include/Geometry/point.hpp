@@ -219,7 +219,7 @@ public:
         return dx * dx + dy * dy + dz * dz;
     }
 
-    T distanceTo(const Point3<T>& p) {
+    T distanceTo(const Point3<T>& p) const {
         T dx = p.x - this->x;
         T dy = p.y - this->y;
         T dz = p.z - this->z;

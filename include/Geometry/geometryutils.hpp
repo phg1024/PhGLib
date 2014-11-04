@@ -31,6 +31,16 @@ void projectPoint(T& u, T& v, const T& x, const T& y, const T& z, const Matrix3x
 }
 
 template <typename T>
+void projectPoint(T& u, T& v, T& d, const T& x, const T& y, const T& z, const Matrix3x3<T>& Pmat) {
+  T nx, ny, nz;
+  const T* m = Pmat.data();
+  nx = m[0] * x + m[1] * y + m[2] * z;
+  ny = m[3] * x + m[4] * y + m[5] * z;
+  nz = m[6] * x + m[7] * y + m[8] * z;
+  u = nx / nz, v = ny / nz, d = z;  // check if this is correct
+}
+
+template <typename T>
 void transformPoint(T& x, T& y, T& z, const Matrix3x3<T>& Rmat, const Point3<T>& Tvec ) {
 	T nx, ny, nz;
 	const T* m = Rmat.data();

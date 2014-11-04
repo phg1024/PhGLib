@@ -118,29 +118,30 @@ namespace PhGUtils {
 		ParamType type;
 	};
 
+  static vector<unsigned char> fromQImage(const QImage &img) {
+    int w = img.width(), h = img.height();
+    vector<unsigned char> pixmap(w*h*4);
+
+    for (int i = 0, idx = 0; i < h; i++) {
+      for (int j = 0; j < w; j++, idx += 4)
+      {
+        QRgb pix = img.pixel(j, i);
+        unsigned char r = qRed(pix);
+        unsigned char g = qGreen(pix);
+        unsigned char b = qBlue(pix);
+        unsigned char a = qAlpha(pix);
+        pixmap[idx] = b;
+        pixmap[idx + 1] = g;
+        pixmap[idx + 2] = r;
+        pixmap[idx + 3] = a;
+      }
+    }
+    return pixmap;
+  }
+
 	static vector<unsigned char> fromQImage(const string& filename) {
-		vector<unsigned char> pixmap;
 		QImage img(filename.c_str());
-
-		int w = img.width(), h = img.height();
-
-		pixmap.resize(w * h * 4);
-
-		for(int i=0, idx=0;i<h;i++) {
-			for(int j=0;j<w;j++,idx+=4)
-			{
-				QRgb pix = img.pixel(j, i);
-				unsigned char r = qRed(pix);
-				unsigned char g = qGreen(pix);
-				unsigned char b = qBlue(pix);
-				unsigned char a = qAlpha(pix);
-				pixmap[idx] = b;
-				pixmap[idx+1] = g;
-				pixmap[idx+2] = r;
-				pixmap[idx+3] = a;
-			}
-		}
-		return pixmap;
+    return fromQImage(img);
 	}
 
 	// assumes BGR format

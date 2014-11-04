@@ -28,6 +28,7 @@ public:
 
 	virtual float findClosestPoint_bruteforce(const Point3f& p, Point3i& vts, Point3f& bcoords);
 	virtual float findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords, float distThreshold);
+  virtual void computeNormals();
 
 protected:
 	virtual void buildVertexFaceMap();
@@ -60,6 +61,7 @@ public:
 	virtual float findClosestPoint_bruteforce(const Point3f& p, Point3i& vts, Point3f& bcoords);
 	virtual float findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords, float distThreshold);
 
+  virtual void computeNormals();
 protected:
 	virtual void buildVertexFaceMap();
 	virtual void buildAABB();

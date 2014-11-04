@@ -162,6 +162,11 @@ float TriMesh::findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoords
 	throw lazy_exception();
 }
 
+void TriMesh::computeNormals()
+{
+
+}
+
 
 
 // ----------------------------------------------------------------------------
@@ -221,27 +226,41 @@ void QuadMesh::draw() const
 		const vert_t& v3 = vertex(f.z);
 		const vert_t& v4 = vertex(f.w);
 
-		//norm_t& n1 = normal(fn.x);
-		//norm_t& n2 = normal(fn.y);
-		//norm_t& n3 = normal(fn.z);
-		//norm_t& n4 = normal(fn.w);
-
-		// compute normal
-		norm_t n = Vector3f(v1, v2).cross(Vector3f(v1, v4));
+#if 0
+    // use face normal
+    norm_t n = Vector3f(v1, v2).cross(Vector3f(v1, v4));
 		n.normalize();
 
-		glBegin(GL_QUADS);
-		glNormal3f(n.x, n.y, n.z);
-		//glNormal3f(n1.x, n1.y, n1.z);
-		glVertex3f(v1.x, v1.y, v1.z);
-		//glNormal3f(n2.x, n2.y, n2.z);
-		glVertex3f(v2.x, v2.y, v2.z);
-		//glNormal3f(n3.x, n3.y, n3.z);
-		glVertex3f(v3.x, v3.y, v3.z);
-		//glNormal3f(n4.x, n4.y, n4.z);
-		glVertex3f(v4.x, v4.y, v4.z);
+    glBegin(GL_QUADS);
+    glNormal3f(n.x, n.y, n.z);
+    //glNormal3f(n1.x, n1.y, n1.z);
+    glVertex3f(v1.x, v1.y, v1.z);
+    //glNormal3f(n2.x, n2.y, n2.z);
+    glVertex3f(v2.x, v2.y, v2.z);
+    //glNormal3f(n3.x, n3.y, n3.z);
+    glVertex3f(v3.x, v3.y, v3.z);
+    //glNormal3f(n4.x, n4.y, n4.z);
+    glVertex3f(v4.x, v4.y, v4.z);
 
-		glEnd();
+    glEnd();
+#else
+    const norm_t& n1 = normal(f.x);
+    const norm_t& n2 = normal(f.y);
+    const norm_t& n3 = normal(f.z);
+    const norm_t& n4 = normal(f.w);
+
+    glBegin(GL_QUADS);
+    glNormal3f(n1.x, n1.y, n1.z);
+    glVertex3f(v1.x, v1.y, v1.z);
+    glNormal3f(n2.x, n2.y, n2.z);
+    glVertex3f(v2.x, v2.y, v2.z);
+    glNormal3f(n3.x, n3.y, n3.z);
+    glVertex3f(v3.x, v3.y, v3.z);
+    glNormal3f(n4.x, n4.y, n4.z);
+    glVertex3f(v4.x, v4.y, v4.z);
+
+    glEnd();
+#endif
 	}
 }
 
@@ -370,6 +389,37 @@ float QuadMesh::findClosestPoint(const Point3f& p, Point3i& vts, Point3f& bcoord
 		// not found
 		return -1.0;
 	}
+}
+
+void QuadMesh::computeNormals()
+{
+  // compute face normals
+  vector<norm_t> faceNormals(nFaces);
+  vector<float> faceAreas(nFaces);
+  for (int i = 0; i < nFaces; i++) {
+    const face_t& f = face(i);
+    //face_t& fn = faceNormal(i);
+    const vert_t& v1 = vertex(f.x);
+    const vert_t& v2 = vertex(f.y);
+    const vert_t& v3 = vertex(f.z);
+    const vert_t& v4 = vertex(f.w);
+
+    // compute normal
+    faceNormals[i] = Vector3f(v1, v2).cross(Vector3f(v1, v4));
+    faceAreas[i] = faceNormals[i].norm();
+  }
+
+  n.resize(nVerts);
+
+  // compute vertex normals
+  for (int i = 0; i < nVerts; ++i) {
+    const set<int> incidentFaces = helper.vfmap[i];
+    n[i] = norm_t(0, 0, 0);
+    for (auto fi : incidentFaces) {
+      n[i] += faceNormals[fi] * faceAreas[fi];
+    }
+    n[i].normalize();
+  }
 }
 
 // ----------------------------------------------------------------------------

@@ -449,6 +449,12 @@ public:
 				m[i][j] = 0;
 	}
 
+  Matrix4x4(const T* elem) {
+    for (int i = 0; i<4; i++)
+      for (int j = 0; j<4; j++)
+        m[i][j] = elem[i*4+j];
+  }
+
 	Matrix4x4(const Matrix4x4& mat)
 	{
 		m[0][0] = mat(0, 0); m[0][1] = mat(0, 1); m[0][2] = mat(0, 2); m[0][3] = mat(0, 3);
@@ -689,6 +695,17 @@ public:
 		w = m[3][0] * p.x + m[3][1] * p.y + m[3][2] * p.z + m[3][3] * p.w;
 		return Point4<PT>(x, y, z, w);
 	}
+
+  template <typename PT>
+  Point3<PT> operator*(const Point3<PT>& p) const
+  {
+    T x, y, z, w;
+    x = m[0][0] * p.x + m[0][1] * p.y + m[0][2] * p.z + m[0][3];
+    y = m[1][0] * p.x + m[1][1] * p.y + m[1][2] * p.z + m[1][3];
+    z = m[2][0] * p.x + m[2][1] * p.y + m[2][2] * p.z + m[2][3];
+    w = m[3][0] * p.x + m[3][1] * p.y + m[3][2] * p.z + m[3][3];
+    return Point3<PT>(x/w, y/w, z/w);
+  }
 
 	template <typename MT, typename VT>
 	friend Vector4<VT> operator*(const Vector4<VT>& v, const Matrix4x4<MT>& mat);

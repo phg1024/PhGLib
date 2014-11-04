@@ -39,6 +39,75 @@ namespace PhGUtils {
 		0, 0, -1.0, 0
 		);
 
+  __forceinline void colorToWorld(float u, float v, float d, float &x, float &y, float &z,
+    float fx, float cx, float cy) {
+
+    const float farval = 1000.0, nearval = 0.00001;
+    const float e33 = -(farval + nearval) / (farval - nearval), e34 = -2.0*farval*nearval / (farval - nearval);
+    // d = (e33 * Z + e34) / (-Z)
+    // d = -e34/Z - e33;
+
+    // M_proj * (x; y; z)
+    // X = e11 * x 
+    // Y = e22 * y
+    // Z = e33 * z + e34
+    // W = -z;
+
+    // normalize it
+    // xc = X/W = -(e11 * x / z + e13)
+    // yc = Y/W = -(e22 * y / z + e23)
+    // zc = Z/W = -(e33 + e34 / z)
+
+    // viewport transform
+    // u = xc * cx + cx
+    // v = yc * cy + cy
+    // d = (farval - nearval)/2 * zc + (farval + nearval)/2
+
+    // compute normalized device coordinates
+    // zc = (d - (farval + nearval)/2) / (farval - nearval)/2
+    float zc = (d - (farval + nearval)*0.5) / ((farval - nearval)*0.5);
+    float yc = (v - cy) / cy;
+    float xc = (u - cx) / cx;
+
+    // compute world coordinates
+    z = -e34 / (zc + e33);
+    y = -yc * z / fx;
+    x = -xc * z / fx;
+  }
+
+  // inverse function of colorToWorld
+  __forceinline void worldToColor(float x, float y, float z, float& u, float& v, float& d,
+      float fx, float cx, float cy) {
+
+    const float farval = 1000.0, nearval = 0.00001;
+    const float e33 = -(farval + nearval) / (farval - nearval), e34 = -2.0*farval*nearval / (farval - nearval);
+
+    // M_proj * (x; y; z)
+    // X = e11 * x 
+    // Y = e22 * y
+    // Z = e33 * z + e34
+    // W = -z;
+    float X = fx * x / cx;
+    float Y = fx * y / cy;
+    float Z = e33 * z + e34;
+    float W = -z;
+
+    // normalize it
+    // xc = X/W = -(e11 * x / z + e13)
+    // yc = Y/W = -(e22 * y / z + e23)
+    // zc = Z/W = -(e33 + e34 / z)
+    float xc = X / W, yc = Y / W, zc = Z / W;
+
+    // viewport transform
+    // u = xc * cx + cx
+    // v = yc * cy + cy
+    // d = (farval - nearval)/2 * zc + (farval + nearval)/2
+    
+    u = xc * cx + cx;
+    v = yc * cy + cy;
+    d = (farval - nearval)*0.5 * zc + (farval + nearval)*0.5;
+  }
+
 	__forceinline void colorToWorld(float u, float v, float d, float &X, float &Y, float &Z) {
 		// focal length
 		const float fx_rgb = 525.0, fy_rgb = 525.0;

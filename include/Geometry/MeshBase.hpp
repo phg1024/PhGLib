@@ -80,6 +80,8 @@ public:
 		return helper.vfmap.at(idx);
 	}
 
+  virtual void computeNormals() {}
+
 	virtual void draw() const = 0;
 	virtual void drawFrame() const = 0;
 	virtual void drawFaceIndices() const = 0;
