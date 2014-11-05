@@ -419,6 +419,7 @@ void QuadMesh::computeNormals()
       n[i] += faceNormals[fi] * faceAreas[fi];
     }
     n[i].normalize();
+    //cout << n[i] << endl;
   }
 }
 

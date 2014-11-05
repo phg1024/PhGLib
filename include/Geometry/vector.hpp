@@ -95,8 +95,9 @@ public:
 
     void normalize()
     {
+      const double eps = 1e-12;
         T n = norm();
-        if( n > numeric_limits<T>::epsilon() )
+        if( n > eps )
         {
             (*this) /= n;
         }
@@ -279,8 +280,9 @@ public:
     // normalize the vector
     void normalize()
     {
+      const double eps = 1e-12;
         T n = norm();
-        if( n > numeric_limits<T>::epsilon() )
+        if( n > eps )
         {
             (*this) /= n;
         }
