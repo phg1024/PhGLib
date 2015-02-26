@@ -22,6 +22,7 @@ public:
 
     Vector2(const vector<T>& elem):x(elem[0]), y(elem[1]){}
     Vector2(T x, T y):x(x),y(y){}
+    Vector2(const T* elem):x(elem[0]), y(elem[1]){}
     Vector2(const Vector2& p):x(p.x), y(p.y){}
 
     QVector2D toQVector() const { return QVector2D(x, y); }
@@ -191,6 +192,7 @@ public:
 
     Vector3(const vector<T>& elem):Vector2<T>(elem), z(elem[2]){}
     Vector3(T x, T y, T z):Vector2<T>(x, y), z(z){}
+    Vector3(const T* elem):Vector2<T>(elem), z(elem[2]){}
     Vector3(const Vector3& p):Vector2<T>(p.x, p.y), z(p.z){}
 
     QVector3D toQVector() const { return QVector3D(this->x, this->y, this->z); }

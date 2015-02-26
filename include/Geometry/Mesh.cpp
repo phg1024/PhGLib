@@ -1,9 +1,11 @@
 #include "Mesh.h"
 #ifdef WIN32
 #include "GL/freeglut.h"
-#else
+#endif
+#ifdef __APPLE__
 #include "GLUT/glut.h"
 #endif
+
 #include "MeshLoader.h"
 #include "geometryutils.hpp"
 #include "AABB.hpp"

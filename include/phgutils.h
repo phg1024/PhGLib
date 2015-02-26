@@ -13,6 +13,10 @@
 #endif
 #endif
 
+#ifdef __linux__
+#define __forceinline
+#endif
+
 /// STL related
 #include <algorithm>
 #include <assert.h>
