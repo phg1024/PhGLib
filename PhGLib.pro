@@ -10,10 +10,8 @@ TARGET = PhGLib
 TEMPLATE = lib
 CONFIG += staticlib c++11
 
-#QMAKE_CXXFLAGS += -std=c++0x
-
-INCLUDEPATH += /usr/local/include
-LIBS += -L/usr/local/lib -lGLEW
+INCLUDEPATH += /usr/local/include /home/phg/SDKs/glew-1.12.0/include
+LIBS += -L/usr/local/lib -L/home/phg/SDKs/glew-1.12.0/lib -lGLEW
 
 SOURCES += \
     include/Geometry/MeshWriter.cpp \
@@ -29,7 +27,8 @@ SOURCES += \
     include/OpenGL/gl2dcanvas.cpp \
     include/Utils/Timer.cpp \
     include/Utils/stringutils.cpp \
-    include/Utils/fileutils.cpp
+    include/Utils/fileutils.cpp \
+    include/OpenGL/fbo.cpp
 
 HEADERS += \
     include/phgutils.h \
@@ -66,4 +65,5 @@ HEADERS += \
     include/Utils/Timer.h \
     include/Utils/stringutils.h \
     include/Utils/singleton.hpp \
-    include/Utils/fileutils.h
+    include/Utils/fileutils.h \
+    include/OpenGL/fbo.h
