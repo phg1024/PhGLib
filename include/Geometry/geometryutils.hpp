@@ -355,9 +355,12 @@ template <typename T>
 void computeBarycentricCoordinates(const Point2<T>& p,
                                    const Point2<T>& q1, const Point2<T>& q2, const Point2<T>& q3,
                                    Point3f& bcoords) {
-  return computeBarycentricCoordinates(Point3<T>(p.x, p.y, 0),
-                                       Point3<T>(q1.x, q1.y, 0), Point3<T>(q2.x, q2.y, 0), Point3<T>(q3.x, q3.y, 0),
-                                       bcoords);
+  T xx3 = p.x - q3.x, x1x3 = q1.x - q3.x, x2x3 = q2.x - q3.x;
+  T yy3 = p.y - q3.y, y1y3 = q1.y - q3.y, y2y3 = q2.y - q3.y;
+  T det = y2y3 * x1x3 - x2x3 * y1y3;
+  bcoords.x = (y2y3 * xx3 - x2x3 * yy3) / det;
+  bcoords.y = (-y1y3 * xx3 + x1x3 * yy3) / det;
+  bcoords.z = 1.0 - bcoords.x - bcoords.y;
 }
 
 template <typename T>
