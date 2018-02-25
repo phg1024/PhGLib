@@ -4,6 +4,8 @@
 #include "point.hpp"
 #include "matrix.hpp"
 
+#include <math.h>
+
 #ifdef WIN32
 #else
 #ifndef __forceinline

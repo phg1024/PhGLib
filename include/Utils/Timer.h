@@ -46,15 +46,10 @@ public:
     void tic();
     void toc();
     void toc(const string& msg);
+    void report(const string& msg);
 
-    float elapsed() const {
-        return totalElapse;
-    }
-
-    float gap() const {
-        duration<float> time_span = duration_cast<duration<float>>(end - start);
-        return time_span.count();
-    }
+    float elapsed() const;
+    float gap() const;
 
 private:
     high_resolution_clock::time_point start, end;

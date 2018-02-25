@@ -27,6 +27,7 @@
 #include <iomanip>
 #include <list>
 #include <map>
+#include <math.h>
 #include <memory>
 #include <numeric>
 #include <queue>

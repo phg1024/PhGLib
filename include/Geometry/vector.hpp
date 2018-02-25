@@ -6,6 +6,7 @@
 // @note	The memory layout in c++ makes it possible to reinterpret an array of vector as an a array of float
 
 #include "point.hpp"
+#include <math.h>
 
 namespace PhGUtils {
 template <typename T>

@@ -18,6 +18,7 @@ namespace PhGUtils {
 	public:
 		virtual bool save(const QuadMesh& mesh, const string& filename);
 		virtual bool save(const TriMesh& mesh, const string& filename);
+    bool save(const QuadMesh& mesh, const vector<int> &selectedFaces, const string& filename);    
 	};
 
 	class PLYWriter : public MeshWriter {

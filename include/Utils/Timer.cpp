@@ -54,8 +54,21 @@ void Timer::toc(const string& msg) {
     totalElapse += gap();
 }
 
+float Timer::elapsed() const {
+    return totalElapse;
+}
+
+float Timer::gap() const {
+    duration<float> time_span = duration_cast<duration<float>>(end - start);
+    return time_span.count();
+}
+
 void Timer::reset() {
     totalElapse = 0;
+}
+
+void Timer::report(const string& msg) {
+    message("Time cost for " + msg + " = " + toString(elapsed()) + " seconds");
 }
 
 #endif
