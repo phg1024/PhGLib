@@ -67,3 +67,7 @@ HEADERS += \
     include/Utils/singleton.hpp \
     include/Utils/fileutils.h \
     include/OpenGL/fbo.h
+
+install_it.path = lib
+install_it.files += build/libPhGLib.a
+INSTALLS += install_it
